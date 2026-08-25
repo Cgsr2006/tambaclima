@@ -1,2 +1,2 @@
 # config-management
-Porjéto de faculdade da matéria de gerência de configurações. O objetivo é desenvolver um projeto simples, no entanto devidamente organizado e documentado  
+Projeto de faculdade da matéria de Gerência de Configurações. O objetivo é desenvolver um projeto simples, no entanto devidamente organizado e documentado  
