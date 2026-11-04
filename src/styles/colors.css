@@ -1,0 +1,61 @@
+
+:root {
+    /* =================================
+       CORES PRINCIPAIS
+    ================================= */
+
+    --color-primary: #2DD473;
+    --color-secondary: #38BDF8;
+
+    /* =================================
+       BACKGROUNDS
+    ================================= */
+
+    --color-background: #061410;
+    --color-background-secondary: #071A13;
+    --color-surface: #0D2118;
+    --color-surface-hover: #1A3329;
+
+    /* =================================
+       TEXTOS
+    ================================= */
+
+    --color-text-primary: #E8F5EE;
+    --color-text-secondary: #9EC4B0;
+    --color-text-muted: #6B9E82;
+
+    /* =================================
+       BORDAS
+    ================================= */
+
+    --color-border: #1E3D2C;
+    --color-border-secondary: #4A6E58;
+
+    /* =================================
+       ESTADOS E ALERTAS
+    ================================= */
+
+    --color-success: #22C55E;
+    --color-warning: #F59E0B;
+    --color-danger: #EF4444;
+    --color-info: #38BDF8;
+
+    /* =================================
+       CORES METEOROLÓGICAS
+    ================================= */
+
+    --color-sunny: #FCD34D;
+    --color-cloudy: #78909C;
+    --color-rain: #38BDF8;
+    --color-storm: #A78BFA;
+
+    /* =================================
+       ÍNDICE UV
+    ================================= */
+
+    --color-uv-low: #22C55E;
+    --color-uv-moderate: #EAB308;
+    --color-uv-high: #F97316;
+    --color-uv-very-high: #EF4444;
+    --color-uv-extreme: #A855F7;
+}
