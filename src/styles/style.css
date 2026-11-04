@@ -1,0 +1,31 @@
+/* ==================== Estilizações gerais ==================== */
+
+body {
+  background-color: var(--color-background);
+  font-family: "Inter", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Outfit", sans-serif;
+}
+
+.temperature,
+.weather-data,
+.numeric-value {
+  font-family: "JetBrains Mono", monospace;
+}
+
+/* ==================== Estilizações NavBar ==================== */
+
+/* ==================== Estilizações Heros Section ==================== */
+
+/* ==================== Estilizações Curiosities ==================== */
+
+/* ==================== Estilizações Climatic Panel ==================== */
+
+/* ==================== Estilizações Footer ==================== */
