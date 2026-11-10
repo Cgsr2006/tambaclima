@@ -3,6 +3,7 @@
 |    Data    | Versão |                               Descrição                               |         Responsável         |
 | :--------: | :-----: | :---------------------------------------------------------------------: | :--------------------------: |
 | 31/08/2026 |   1.0   | Elaboração inicial da Especificação de Requisitos de Software (ERS) | Carlos Gabriel Silva Ribeiro |
+| 10/11/2026 |   1.1   | Atualização de escopo, arquitetura, dados, API e casos de uso conforme repositório e GitHub Project | Carlos Gabriel Silva Ribeiro |
 
 **1\. Introdução**
 
@@ -20,7 +21,7 @@ A arquitetura pretendida segue o padrão cliente-side tradicional em **camadas**
 
 1. **Camada de Apresentação (Interface / DOM):** Arquivo `index.html` e estilizações CSS3 (`style.css`), responsáveis por renderizar os cartões de clima, botões e seções de curiosidades.
 2. **Camada de Lógica de Aplicação (JavaScript):** Scripts executados no navegador (`src/scripts/script.js`) que manipulam a DOM, capturam eventos do usuário e orquestram a exibição das informações.
-3. **Camada de Serviços e Dados (API Service & Mock Fallback):** Módulo de serviço climático a ser implementado encarregado de efetuar as chamadas via `fetch()` para a API WeatherBit e chavear para o `src/data/mockedData.json` caso haja indisponibilidade da rede.
+3. **Camada de Serviços e Dados (API Service & Mock Fallback):** Módulo de serviço climático a ser implementado encarregado de efetuar as chamadas via `fetch()` para a API Weatherbit e chavear para o `src/data/mockedData.json` caso haja indisponibilidade da rede.
 
 **3\. Modelo de Casos de Uso**
 
@@ -29,13 +30,13 @@ A arquitetura pretendida segue o padrão cliente-side tradicional em **camadas**
 | ID  | ATOR               | DESCRIÇÃO                                                                                                |
 | :-- | :----------------- | :--------------------------------------------------------------------------------------------------------- |
 | A01 | Usuário/Visitante | Pessoa que acessa a *landing page* para consultar informações climáticas e curiosidades da Amazônia. |
-| A02 | API WeatherBit     | Sistema externo provador dos dados meteorológicos brutos via JSON em tempo real.                          |
+| A02 | API Weatherbit     | Sistema externo provador dos dados meteorológicos brutos via JSON em tempo real.                          |
 
 **3.2 Diagramas de Caso de Uso**
 
 ![Diagrama de casos de uso do Tambaclima](diagrama-casos-de-uso.svg)
 
-O visitante pode consultar o clima atual de Manaus, as curiosidades da Amazônia e, opcionalmente, o panorama do clima nas capitais. A API WeatherBit é o ator externo que fornece dados climáticos. O caso de uso de dados locais estende a consulta do clima quando a API está indisponível.
+O visitante pode consultar o clima atual de Manaus, as curiosidades da Amazônia e, opcionalmente, o panorama do clima nas capitais. A API Weatherbit é o ator externo que fornece dados climáticos. O caso de uso de dados locais estende a consulta do clima quando a API está indisponível.
 
 | ID   | Caso de Uso                               | Descrição                                                                                                                                                           |
 | ---- | :---------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -44,25 +45,25 @@ O visitante pode consultar o clima atual de Manaus, as curiosidades da Amazônia
 | UC03 | Adicionar Fallback (Modo offline / Mock)  | Quando a API falha, o sistema consome os dados locais (`src/data/mockedData.json`) e exibe uma notificação discreta ao usuário informando o uso de dados salvos. |
 | UC04 | Consultar Panorama de Capitais (Opcional) | O usuário visualiza os dados meteorológicos resumidos de outras capitais brasileiras.                                                                               |
 
-**3.3 Diagrama de Classes (descrição)**
+**3.3 Fluxos dos Casos de Uso**
 
 **UC01 e UC02 (Visualizar Clima de Manaus / Dados educativos sobre Amazônia):**
 
 * ***Ator Principal:*** Usuário (A01).
-* ***Fluxo Principal:*** 1\. Usuário acessa o site; 2\. O script TypeScript dispara requisição à API WeatherBit; 3\. Dados são retornados e formatados na tela; 4\. Cartão principal de Manaus é atualizado.
+* ***Fluxo Principal:*** 1\. Usuário acessa o site; 2\. O script JavaScript dispara requisição à API Weatherbit; 3\. Dados são retornados e formatados na tela; 4\. Cartão principal de Manaus é atualizado.
 
 **UC03 (Acionar Fallback):**
 
-* ***Atores:*** Usuário (A01) e API WeatherBit (A02).
+* ***Atores:*** Usuário (A01) e API Weatherbit (A02).
 * ***Fluxo Exceção:***
   1. Requisição à API excede tempo limite ou retorna status HTTP \>= 400;
   2. O serviço de dados captura o erro;
   3. Arquivo de dados mockados é lido;
   4. Interface exibe aviso de "Dados em modo de contingência".
 
-**4\. Estrutura do Banco de Dados (modelo lógico simplificado)**
+**4\. Modelo de Dados (lógico)**
 
-Por se tratar de uma aplicação cliente-side sem backend nem Banco de Dados relacional, o armazenamento de dados é estruturado via arquivos **JSON estáticos** e **LocalStorage** do navegador.
+O Tambaclima é uma aplicação cliente-side, sem backend próprio e sem banco de dados relacional. O contrato de dados externo é o JSON da Weatherbit; os dados locais em `src/data/mockedData.json` são previstos para fallback. O uso de LocalStorage não está confirmado na implementação atual e não é requisito desta versão. Estrutura conceitual: `WeatherSnapshot` contém localidade, instante de observação, temperatura, sensação térmica, umidade, vento, pressão, UV, precipitação e descrição/ícone da condição, com proveniência (`weatherbit` ou `mock`). Campos ausentes devem ser tratados como indisponíveis, sem inventar valores.
 
 **5\. Regras de Validação**
 
@@ -84,11 +85,17 @@ Por se tratar de uma aplicação cliente-side sem backend nem Banco de Dados rel
 
 **7\. Requisitos de API REST**
 
-* **Endpoint Utilizado:** GET \[https://api.weatherbit.io/v2.0/current\](https://api.weatherbit.io/v2.0/current)
+* **Endpoint documentado:** GET `https://api.weatherbit.io/v2.0/current` (condições atuais; contrato em `docs/api/openapi.yaml`).
 * **Parâmetros da Requisição:**
 
   * **city:** Manaus
   * **country:** BR
-  * **key:** \[MINHA\_CHAVE\_DE\_API\_WEATHERBIT\]
+  * **key:** variável secreta `WEATHERBIT_API_KEY`; nunca registrar valor real nos documentos ou no repositório.
+  * **units:** M (métrico)
   * **lang:** pt
 * **Tratamento de Erros de Integração:** Timeout configurado para 5000ms (5 segundos). Se a API não responder no tempo estipulado, aborta a requisição e utiliza a resposta estática do arquivo com dados salvos.
+
+
+**8. Limites e pendências de escopo (10/11/2026)**
+
+A API current fornece condições atuais, não previsão. A chance/probabilidade de chuva e a previsão citadas em requisitos anteriores não estão cobertas por esse endpoint; requerem endpoint adicional e confirmação de escopo. RF-02 (previsão), RF-05 (alertas), RF-06 (capitais) e RF-07 (atualização manual/automática) precisam de validação/rastreio explícito no Project. A issue #16 está em progresso e vinculada ao painel detalhado (#11); isso não equivale à conclusão dos requisitos relacionados. A lista de requisitos e casos de uso desta ERS deve ser lida como escopo pretendido, com estado de implementação acompanhado pela RTM e pelo Project. A lista da Entrega 2 também usa RF-02 para segurança, enquanto o Documento de Requisitos atual usa RF-02 para previsão; confirmar com o professor a nomenclatura e o que espera avaliar, pois o projeto atual não prevê backend.

@@ -13,7 +13,7 @@
 * **Disciplina:** Gerência de Configuração  
 * **Integrantes:** Andrês Miguel Albuquerque Petrelli, Carlos Gabriel Silva Ribeiro, Diorge Guerreiro Ribeiro, Giovanna Coelho Rodrigues e Nataly Ramos Ribeiro  
 * **Período do Projeto:** 19/08/2026 a 25/11/2026
-* **Estado em 10/11/2026:** desenvolvimento em andamento; issues de implementação permanecem abertas e algumas podem estar em progresso. Funcionalidades planejadas não são consideradas concluídas.
+* **Estado em 10/11/2026:** desenvolvimento em andamento. No GitHub Project em 10/11/2026, a issue #15 está Done; #6 e #16 estão In Progress; #7–#14 e #17 estão Todo. Funcionalidades planejadas não são consideradas concluídas.
 
 
 **2\. Objetivo do Projeto**
@@ -53,7 +53,7 @@ Desenvolver uma *landing page* responsiva para exibição em tempo real de dados
 | 13 \- 14 | **Validação, Testes e Baseline**: Testes de usabilidade e responsividade em múltiplos navegadores, revisão do controle de versão (ICs) e **congelamento da *Baseline*** na branch `main`  |
 | 14 \- 15 | **Deploy Final & Apresentação:** Publicação da aplicação na Vercel, finalização do Relatório Final e apresentações nos dias 18 e 25/11.  |
 
-O cronograma acima é o planejamento macro original. O acompanhamento operacional ocorre pelas issues do repositório; datas e semanas estimadas devem ser replanejadas conforme o progresso real. A issue #6 corresponde à estrutura inicial presente no código; as issues #7–#14 representam entregas abertas, algumas em progresso e outras ainda por iniciar; o estado individual deve ser acompanhado no GitHub. Issue aberta ou em progresso não significa requisito concluído.
+O cronograma acima é o planejamento macro original. O acompanhamento operacional ocorre pelas issues do repositório; datas e semanas estimadas devem ser replanejadas conforme o progresso real. No snapshot de 10/11/2026, #15 (estrutura inicial de HTML/CSS/assets) está Done; #6 (preparar estrutura inicial) e #16 (painel detalhado, relacionado a #11) estão In Progress; #7–#14 e #17 estão Todo. O Project do GitHub é a fonte para o estado operacional; a RTM em docs relaciona requisitos, issues, ICs e evidências. Issue concluída no Project não substitui a validação funcional do requisito.
 
 **5\. Metodologia de Desenvolvimento**
 
