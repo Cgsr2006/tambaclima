@@ -12,7 +12,8 @@
 * **Nome do Projeto:** Landing Page de Informações Climáticas (Tambaclima)  
 * **Disciplina:** Gerência de Configuração  
 * **Integrantes:** Andrês Miguel Albuquerque Petrelli, Carlos Gabriel Silva Ribeiro, Diorge Guerreiro Ribeiro, Giovanna Coelho Rodrigues e Nataly Ramos Ribeiro  
-* **Período do Projeto:** 19/08/2026 a 25/11/2026 
+* **Período do Projeto:** 19/08/2026 a 25/11/2026
+* **Estado em 10/11/2026:** desenvolvimento em andamento. No GitHub Project em 10/11/2026, a issue #15 está Done; #6 e #16 estão In Progress; #7–#14 e #17 estão Todo. Funcionalidades planejadas não são consideradas concluídas.
 
 
 **2\. Objetivo do Projeto**
@@ -45,12 +46,14 @@ Desenvolver uma *landing page* responsiva para exibição em tempo real de dados
 | :---- | :---- |
 | 1 \- 2 | Idealização do projeto, criação do repositório no GitHub, elaboração e finalização do **Plano de Projeto** e **Tabela de Requisitos**.  |
 | 3 \- 4 | **Prototipação & Design System**: Definição do layout responsivo, fluxo visual e componentes no Figma (Manaus, Curiosidades Amazônicas e Capitais).  |
-| 5 \- 6 | **Setup e Estrutura Frontend**: Configuração do projeto web (React/HTML/CSS), criação dos componentes estáticos e estruturação do layout.  |
+| 5 \- 6 | **Setup e Estrutura Frontend**: Configuração do projeto web em HTML, CSS e JavaScript, criação da estrutura inicial e organização dos arquivos.  |
 | 7 \- 8 | **Seção Amazônia & Layout Responsivo**: Implementação e estilização das seções informativas/curiosidades e garantia de responsividade para dispositivos móveis.  |
 | 9 \- 10 | **Integração com API Climatológica**: Conexão com a API WeatherBit para carregar dados em tempo real de Manaus e tratamento de *fallbacks* (dados em *mock* em arquivos JSON).  |
 | 11 \- 12 | **Escopo Adicional & Refatoração**: Expansão para exibição de outras capitais do Brasil (se o prazo permitir) e ajustes finos na interface.  |
 | 13 \- 14 | **Validação, Testes e Baseline**: Testes de usabilidade e responsividade em múltiplos navegadores, revisão do controle de versão (ICs) e **congelamento da *Baseline*** na branch `main`  |
 | 14 \- 15 | **Deploy Final & Apresentação:** Publicação da aplicação na Vercel, finalização do Relatório Final e apresentações nos dias 18 e 25/11.  |
+
+O cronograma acima é o planejamento macro original. O acompanhamento operacional ocorre pelas issues do repositório; datas e semanas estimadas devem ser replanejadas conforme o progresso real. No snapshot de 10/11/2026, #15 (estrutura inicial de HTML/CSS/assets) está Done; #6 (preparar estrutura inicial) e #16 (painel detalhado, relacionado a #11) estão In Progress; #7–#14 e #17 estão Todo. O Project do GitHub é a fonte para o estado operacional; a RTM em docs relaciona requisitos, issues, ICs e evidências. Issue concluída no Project não substitui a validação funcional do requisito.
 
 **5\. Metodologia de Desenvolvimento**
 
@@ -75,7 +78,7 @@ Desenvolver uma *landing page* responsiva para exibição em tempo real de dados
 **7\. Recursos Necessários**
 
 * **Prototipação:** Figma.  
-* **Tecnologias Frontend:** HTML, CSS, JavaScript/TypeScript.  
+* **Tecnologias Frontend:** HTML, CSS e JavaScript (estrutura atual); TypeScript não está presente no código atual e só deverá ser incluído se a equipe decidir adotá-lo.  
 * **API de Clima:** API pública WeatherBit.  
 * **Deploy e Hospedagem:** Vercel.  
 * **Comunicação:** WhatsApp e reuniões alinhadas da equipe.
