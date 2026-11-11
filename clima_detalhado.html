@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Clima Detalhado</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        
+        * { box-sizing: border-box; margin: 0; }
+        
+        body { 
+            background: #06130c; 
+            color: #fff; 
+            font-family: 'Inter', system-ui, sans-serif; 
+            padding: 40px 16px;
+            display: flex; 
+            justify-content: center; 
+        }
+        
+        main { 
+            width: 100%; 
+            max-width: 900px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 20px; 
+        }
+
+        /* Header e Input */
+        .tag { display: flex; align-items: center; gap: 6px; color: #14b8a6; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+        h1 { font-size: 42px; font-weight: 800; letter-spacing: -1px; margin-bottom: 8px; }
+        .desc { color: #8b9a91; font-size: 15px; margin-bottom: 24px; max-width: 500px; }
+        
+        input { width: 100%; max-width: 380px; padding: 14px 20px; color: #fff; background: #0b1d14; border: 1px solid #1a3826; border-radius: 12px; font-family: inherit; font-size: 14px; outline: none; }
+        input::placeholder { color: #4b5e53; }
+        input:focus { border-color: #14b8a6; }
+
+        /* Card Principal */
+        .main-card { background: #0b1d14; border: 1px solid #1a3826; border-radius: 20px; padding: 32px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 24px; }
+        .weather { display: flex; align-items: center; gap: 20px; }
+        .weather .icon { color: #facc15; width: 56px; height: 56px; filter: drop-shadow(0 0 20px rgba(250,204,21,0.2)); }
+        .weather b { display: block; font-size: 56px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+        .weather span { color: #8b9a91; font-size: 14px; font-weight: 500; }
+        .weather strong { color: #fff; font-weight: 600; }
+
+        /* Alerta UV */
+        .alert { display: flex; gap: 12px; align-items: flex-start; padding: 16px; background: #1f150a; border: 1px solid #3b2512; border-radius: 12px; max-width: 340px; }
+        .alert i { color: #d97736; width: 20px; height: 20px; flex-shrink: 0; }
+        .alert p { color: #d99f75; font-size: 13px; line-height: 1.4; font-weight: 500; }
+        .alert strong { display: block; color: #e6aa7e; font-size: 14px; margin-bottom: 2px; }
+
+        /* Grid de Métricas (Inspirado na lógica do Claude, mas com layout corrigido) */
+        .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; }
+        
+        .card { background: #0b1d14; border: 1px solid #1a3826; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; }
+        
+        .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+        .card-top span { color: #8b9a91; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .card-top i { color: var(--c); width: 16px; height: 16px; stroke-width: 2.5px; }
+        
+        .card-val { font-size: 32px; font-weight: 700; line-height: 1; margin-bottom: auto; }
+        .card-val small { font-size: 14px; color: #8b9a91; font-weight: 500; }
+        .card-val.red { color: var(--c); } /* Específico para o índice UV */
+
+        /* Barra de progresso reposicionada para a base */
+        .bar { width: 100%; height: 4px; background: #162e20; border-radius: 4px; margin: 16px 0 8px 0; overflow: hidden; }
+        .bar::after { content: ''; display: block; height: 100%; width: var(--w); background: var(--c); border-radius: 4px; }
+        
+        .card-status { color: #8b9a91; font-size: 11px; font-weight: 500; }
+    </style>
+</head>
+<body>
+    <main>
+        <header>
+            <div class="tag">
+                <i data-lucide="search" style="width:14px;height:14px;stroke-width:3"></i> 
+                Consulta meteorológica
+            </div>
+            <h1>Clima Detalhado</h1>
+            <p class="desc">Métricas meteorológicas aprofundadas para as capitais brasileiras em tempo real.</p>
+            <input type="text" placeholder="Buscar capital brasileira...">
+        </header>
+
+        <section class="main-card">
+            <div class="weather">
+                <i data-lucide="cloud-sun" class="icon"></i>
+                <div>
+                    <b>32°C</b>
+                    <span><strong>Manaus, AM</strong> — Parcialmente Nublado</span>
+                </div>
+            </div>
+            <div class="alert">
+                <i data-lucide="triangle-alert"></i>
+                <p><strong>Alerta UV Alto</strong> Evite exposição direta entre 10h e 16h</p>
+            </div>
+        </section>
+
+        <!-- Aplicação da lógica de variáveis (--c para cor, --w para largura) -->
+        <section class="cards">
+            <div class="card" style="--c: #38bdf8; --w: 87%">
+                <div class="card-top"><span>Umidade relativa</span><i data-lucide="droplet"></i></div>
+                <div class="card-val">87%</div>
+                <div class="bar"></div>
+                <div class="card-status">Muito úmido</div>
+            </div>
+
+            <div class="card" style="--c: #ef4444; --w: 80%">
+                <div class="card-top"><span>Índice UV</span><i data-lucide="sun"></i></div>
+                <div class="card-val red">8</div>
+                <div class="bar"></div>
+                <div class="card-status">Muito Alto</div>
+            </div>
+
+            <div class="card" style="--c: #2dd4bf; --w: 30%">
+                <div class="card-top"><span>Vel. do vento</span><i data-lucide="wind"></i></div>
+                <div class="card-val">14 <small>km/h</small></div>
+                <div class="bar"></div>
+                <div class="card-status">Fraco</div>
+            </div>
+
+            <div class="card" style="--c: #facc15; --w: 60%">
+                <div class="card-top"><span>Pressão atm.</span><i data-lucide="gauge"></i></div>
+                <div class="card-val">1009 <small>hPa</small></div>
+                <div class="bar"></div>
+                <div class="card-status">Baixa pressão</div>
+            </div>
+
+            <div class="card" style="--c: #3b82f6; --w: 65%">
+                <div class="card-top"><span>Chance de chuva</span><i data-lucide="cloud-rain"></i></div>
+                <div class="card-val">65%</div>
+                <div class="bar"></div>
+                <div class="card-status">Possível</div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
