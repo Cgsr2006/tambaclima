@@ -27,5 +27,213 @@ h6 {
 /* ==================== Estilizações Curiosities ==================== */
 
 /* ==================== Estilizações Climatic Panel ==================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
 
+section {
+  background: #061410;
+  color: #fff;
+  font-family: "Inter", system-ui, sans-serif;
+  padding: 40px 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.content {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/*Header e Input*/
+.tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #38bdf8;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+h1 {
+  font-size: 42px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 8px;
+}
+.desc {
+  color: #6b9e82;
+  font-size: 15px;
+  margin-bottom: 24px;
+  max-width: 500px;
+}
+
+input {
+  width: 100%;
+  max-width: 380px;
+  padding: 14px 20px;
+  color: #fff;
+  background: #0b1d14;
+  border: 1px solid #1a3826;
+  border-radius: 12px;
+  font-family: "Outfit", sans-serif;
+  font-size: 14px;
+  outline: none;
+}
+input::placeholder {
+  color: #4b5e53;
+}
+input:focus {
+  border-color: #38bdf8;
+}
+
+/*Card Principal*/
+.main-card {
+  background: #0b1d14;
+  border: 1px solid #1a3826;
+  border-radius: 20px;
+  padding: 32px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+.weather {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.weather .icon {
+  color: #facc15;
+  width: 56px;
+  height: 56px;
+  filter: drop-shadow(0 0 20px rgba(250, 204, 21, 0.2));
+}
+.weather b {
+  display: block;
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.weather span {
+  color: #8b9a91;
+  font-size: 14px;
+  font-weight: 500;
+}
+.weather strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+/*Alerta UV*/
+.alert {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 16px;
+  background: #1f150a;
+  border: 1px solid #3b2512;
+  border-radius: 12px;
+  max-width: 340px;
+}
+.alert i {
+  color: #d97736;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+.alert p {
+  color: #d99f75;
+  font-size: 13px;
+  line-height: 1.4;
+  font-weight: 500;
+}
+.alert strong {
+  display: block;
+  color: #e6aa7e;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  background: #0b1d14;
+  border: 1px solid #1a3826;
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+.card-top span {
+  color: #8b9a91;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.card-top i {
+  color: var(--c);
+  width: 16px;
+  height: 16px;
+  stroke-width: 2.5px;
+}
+
+.card-val {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: auto;
+}
+.card-val small {
+  font-size: 14px;
+  color: #8b9a91;
+  font-weight: 500;
+}
+.card-val.red {
+  color: var(--c);
+}
+
+/*Barra de progresso*/
+.bar {
+  width: 100%;
+  height: 4px;
+  background: #162e20;
+  border-radius: 4px;
+  margin: 16px 0 8px 0;
+  overflow: hidden;
+}
+.bar::after {
+  content: "";
+  display: block;
+  height: 100%;
+  width: var(--w);
+  background: var(--c);
+  border-radius: 4px;
+}
+
+.card-status {
+  color: #8b9a91;
+  font-size: 11px;
+  font-weight: 500;
+}
 /* ==================== Estilizações Footer ==================== */
