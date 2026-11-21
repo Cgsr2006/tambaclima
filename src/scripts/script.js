@@ -26,10 +26,13 @@
   if (!elements.temperature) return;
 
   const weatherIcons = {
-    clear: '<svg viewBox="0 0 96 96"><circle cx="48" cy="48" r="18"/><path d="M48 8v12M48 76v12M8 48h12M76 48h12M19 19l9 9M68 68l9 9M77 19l-9 9M28 68l-9 9"/></svg>',
-    clouds: '<svg viewBox="0 0 96 96"><circle cx="36" cy="30" r="15"/><path class="cloud" d="M20 65c0-9 7-16 16-16 3-10 12-16 22-13 8 2 13 9 13 17 8 0 14 6 14 13s-6 13-14 13H34c-8 0-14-6-14-14Z"/></svg>',
+    clear:
+      '<svg viewBox="0 0 96 96"><circle cx="48" cy="48" r="18"/><path d="M48 8v12M48 76v12M8 48h12M76 48h12M19 19l9 9M68 68l9 9M77 19l-9 9M28 68l-9 9"/></svg>',
+    clouds:
+      '<svg viewBox="0 0 96 96"><circle cx="36" cy="30" r="15"/><path class="cloud" d="M20 65c0-9 7-16 16-16 3-10 12-16 22-13 8 2 13 9 13 17 8 0 14 6 14 13s-6 13-14 13H34c-8 0-14-6-14-14Z"/></svg>',
     rain: '<svg viewBox="0 0 96 96"><path class="cloud" d="M15 52c0-9 7-16 16-16 3-10 12-16 22-13 8 2 13 9 13 17 8 0 14 6 14 13s-6 13-14 13H29c-8 0-14-6-14-14Z"/><path d="m33 73-5 12m25-12-5 12m25-12-5 12" fill="none" stroke="#38bdf8" stroke-width="4" stroke-linecap="round"/></svg>',
-    storm: '<svg viewBox="0 0 96 96"><path class="cloud" d="M15 48c0-9 7-16 16-16 3-10 12-16 22-13 8 2 13 9 13 17 8 0 14 6 14 13s-6 13-14 13H29c-8 0-14-6-14-14Z"/><path d="m51 62-12 19h12l-5 13 20-24H54l7-8Z" fill="#fcd34d" stroke="#fcd34d"/></svg>',
+    storm:
+      '<svg viewBox="0 0 96 96"><path class="cloud" d="M15 48c0-9 7-16 16-16 3-10 12-16 22-13 8 2 13 9 13 17 8 0 14 6 14 13s-6 13-14 13H29c-8 0-14-6-14-14Z"/><path d="m51 62-12 19h12l-5 13 20-24H54l7-8Z" fill="#fcd34d" stroke="#fcd34d"/></svg>',
   };
 
   function setStatus(label, mode = "") {
@@ -39,7 +42,9 @@
 
   function formatNumber(value, digits = 0) {
     const number = Number(value);
-    return Number.isFinite(number) ? number.toFixed(digits).replace(".", ",") : "—";
+    return Number.isFinite(number)
+      ? number.toFixed(digits).replace(".", ",")
+      : "—";
   }
 
   function updateWeather(data) {
@@ -50,12 +55,21 @@
     const isCloudy = code >= 700 || code === 801 || code === 802;
     elements.temperature.innerHTML = `${formatNumber(data.temp)}<span>°C</span>`;
     elements.feelsLike.textContent = `${formatNumber(data.app_temp)}°C`;
-    elements.description.textContent = weather.description || "Condição não informada";
+    elements.description.textContent =
+      weather.description || "Condição não informada";
     elements.humidity.innerHTML = `${formatNumber(data.rh)}<small>%</small>`;
     elements.wind.innerHTML = `${formatNumber(Number(data.wind_spd) * 3.6)}<small> km/h</small>`;
     elements.rainChance.innerHTML = `${formatNumber(data.precip, 1)}<small> mm</small>`;
-    elements.symbol.innerHTML = isStorm ? weatherIcons.storm : isRain ? weatherIcons.rain : isCloudy ? weatherIcons.clouds : weatherIcons.clear;
-    const observedAt = data.ob_time ? `Atualizado às ${data.ob_time} (horário local)` : "Dados meteorológicos atualizados.";
+    elements.symbol.innerHTML = isStorm
+      ? weatherIcons.storm
+      : isRain
+        ? weatherIcons.rain
+        : isCloudy
+          ? weatherIcons.clouds
+          : weatherIcons.clear;
+    const observedAt = data.ob_time
+      ? `Atualizado às ${data.ob_time} (horário local)`
+      : "Dados meteorológicos atualizados.";
     elements.updated.textContent = observedAt;
     setStatus("DADOS ATUALIZADOS", "is-live");
   }
@@ -64,8 +78,10 @@
     const apiKey = window.TAMBACLIMA_CONFIG?.weatherbitKey;
     if (!apiKey || apiKey === "SUA_CHAVE") {
       setStatus("API NÃO CONFIGURADA");
-      elements.description.textContent = "Aguardando conexão com a API meteorológica.";
-      elements.updated.textContent = "Configure a chave Weatherbit para exibir dados atuais.";
+      elements.description.textContent =
+        "Aguardando conexão com a API meteorológica.";
+      elements.updated.textContent =
+        "Configure a chave Weatherbit para exibir dados atuais.";
       return;
     }
 
@@ -89,14 +105,17 @@
       } finally {
         window.clearTimeout(timeout);
       }
-      if (!response.ok) throw new Error(`Weatherbit respondeu com HTTP ${response.status}`);
+      if (!response.ok)
+        throw new Error(`Weatherbit respondeu com HTTP ${response.status}`);
       const payload = await response.json();
-      if (!payload.data?.length) throw new Error("A API não retornou dados para Manaus.");
+      if (!payload.data?.length)
+        throw new Error("A API não retornou dados para Manaus.");
       updateWeather(payload.data[0]);
     } catch (error) {
       console.error("Não foi possível carregar o clima de Manaus:", error);
       setStatus("DADOS INDISPONÍVEIS");
-      elements.description.textContent = "Não foi possível consultar o clima agora.";
+      elements.description.textContent =
+        "Não foi possível consultar o clima agora.";
       elements.updated.textContent = "Verifique a conexão e tente novamente.";
     } finally {
       elements.refresh.disabled = false;
