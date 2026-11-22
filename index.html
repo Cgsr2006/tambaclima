@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -22,14 +22,59 @@
     />
   </head>
   <body>
-    <nav class="nav-bar"></nav>
+    <nav class="nav-bar">
+      <div class="nav-container">
+        <a href="#inicio" class="brand">
+          <svg class="brand-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="9.5" class="icon-bg" />
+            <path d="M12 2.5A9.5 9.5 0 1 1 6.4 4.3" class="icon-ring" />
+            <line x1="12" y1="2.5" x2="12" y2="21.5" class="icon-axis" />
+            <circle cx="12" cy="12" r="2.8" class="icon-dot" />
+          </svg>
+          <span>Tambaclima</span>
+        </a>
 
-    <section class="hero"></section>
+        <ul class="nav-links">
+          <li><a href="#inicio">Início</a></li>
+          <li><a href="#amazonia">Amazônia</a></li>
+          <li><a href="#clima">Clima Detalhado</a></li>
+        </ul>
 
-    <section class="curiosities"></section>
+        <div class="live-badge">
+          <span class="live-dot"></span>
+          AO VIVO
+        </div>
+      </div>
+    </nav>
 
-    <section class="meteorologic-pannel"></section>
+    <section id="inicio" class="hero"></section>
 
-    <footer class="footer"></footer>
+    <section id="amazonia" class="curiosities"></section>
+
+    <section id="clima" class="meteorologic-pannel"></section>
+
+    <footer class="footer">
+      <div class="footer-container">
+        <a href="#inicio" class="brand">
+          <svg class="brand-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="9.5" class="icon-bg" />
+            <path d="M12 2.5A9.5 9.5 0 1 1 6.4 4.3" class="icon-ring" />
+            <line x1="12" y1="2.5" x2="12" y2="21.5" class="icon-axis" />
+            <circle cx="12" cy="12" r="2.8" class="icon-dot" />
+          </svg>
+          <span>Tambaclima</span>
+        </a>
+
+        <p class="footer-info">
+          Dados meteorológicos em tempo real &middot; Amazônia, Brasil
+        </p>
+
+        <ul class="footer-links">
+          <li><a href="#inicio">Início</a></li>
+          <li><a href="#amazonia">Amazônia</a></li>
+          <li><a href="#clima">Clima</a></li>
+        </ul>
+      </div>
+    </footer>
   </body>
 </html>
