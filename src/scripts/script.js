@@ -363,15 +363,6 @@
 
   async function loadWeather(city = "Manaus", state = "AM", updateHero = true) {
     const apiKey = window.TAMBACLIMA_CONFIG?.weatherbitApiKey;
-    if (!apiKey) {
-      await renderFallback(
-        city,
-        state,
-        updateHero,
-        "Chave Weatherbit não configurada.",
-      );
-      return;
-    }
     fields.refresh.disabled = true;
     fields.refresh.setAttribute("aria-busy", "true");
     setApiStatus("checking");
@@ -382,52 +373,49 @@
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), 10000);
     try {
-      // Para capitais brasileiras, envie cidade e país; não combine também o estado.
-      const params = new URLSearchParams({
-        city,
-        country: "BR",
-        key: apiKey,
-        lang: "pt",
-      });
       const options = { signal: controller.signal };
-      const readWeatherbit = async (url, endpoint) => {
-        const response = await fetch(url, options);
+      let weather;
+      if (apiKey) {
+        // Live Server local: consulta a Weatherbit diretamente com a chave local.
+        const params = new URLSearchParams({ city, country: "BR", key: apiKey, lang: "pt" });
+        const readWeatherbit = async (url, endpoint) => {
+          const response = await fetch(url, options);
+          const payload = await response.json().catch(() => ({}));
+          if (!response.ok) {
+            const details = payload.error || payload.message || "Resposta inválida";
+            throw new Error(`${endpoint}: HTTP ${response.status} — ${details}`);
+          }
+          return payload;
+        };
+        const [currentPayload, forecastPayload] = await Promise.all([
+          readWeatherbit(`https://api.weatherbit.io/v2.0/current?${params}`, "Clima atual"),
+          readWeatherbit(`https://api.weatherbit.io/v2.0/forecast/daily?${params}&days=1`, "Previsão diária"),
+        ]);
+        const current = currentPayload.data?.[0];
+        if (!current) throw new Error(`A Weatherbit não retornou dados para ${city}.`);
+        weather = {
+          city: current.city_name || city,
+          state: current.state_code || state,
+          temp: current.temp,
+          feelsLike: current.app_temp,
+          description: current.weather?.description,
+          humidity: current.rh,
+          windKmh: Number(current.wind_spd) * 3.6,
+          rainChance: forecastPayload.data?.[0]?.pop ?? 0,
+          pressure: current.pres,
+          uv: current.uv,
+          observedAt: current.ts ? new Date(current.ts * 1000).toISOString() : new Date().toISOString(),
+        };
+      } else {
+        // Deploy Vercel: a chave permanece no servidor, dentro de /api/weather.
+        const query = new URLSearchParams({ city, state });
+        const response = await fetch(`/api/weather?${query}`, options);
         const payload = await response.json().catch(() => ({}));
         if (!response.ok) {
-          const details =
-            payload.error || payload.message || "Resposta inválida";
-          throw new Error(`${endpoint}: HTTP ${response.status} — ${details}`);
+          throw new Error(`API Vercel: HTTP ${response.status} — ${payload.error || "Resposta inválida"}`);
         }
-        return payload;
-      };
-      const [currentPayload, forecastPayload] = await Promise.all([
-        readWeatherbit(
-          `https://api.weatherbit.io/v2.0/current?${params}`,
-          "Clima atual",
-        ),
-        readWeatherbit(
-          `https://api.weatherbit.io/v2.0/forecast/daily?${params}&days=1`,
-          "Previsão diária",
-        ),
-      ]);
-      const current = currentPayload.data?.[0];
-      if (!current)
-        throw new Error(`A Weatherbit não retornou dados para ${city}.`);
-      const weather = {
-        city: current.city_name || city,
-        state: current.state_code || state,
-        temp: current.temp,
-        feelsLike: current.app_temp,
-        description: current.weather?.description,
-        humidity: current.rh,
-        windKmh: Number(current.wind_spd) * 3.6,
-        rainChance: forecastPayload.data?.[0]?.pop ?? 0,
-        pressure: current.pres,
-        uv: current.uv,
-        observedAt: current.ts
-          ? new Date(current.ts * 1000).toISOString()
-          : new Date().toISOString(),
-      };
+        weather = payload;
+      }
       writeSessionCache(weather);
       renderWeather(weather, updateHero);
       if (!updateHero)
@@ -456,5 +444,17 @@
   document.addEventListener("pointerdown", (event) => {
     if (!event.target.closest(".capital-search")) closeCapitalOptions();
   });
-  loadWeather();
+  function initializeWeather() {
+    const isLocalLiveServer = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+    if (!isLocalLiveServer) {
+      loadWeather();
+      return;
+    }
+    const localConfig = document.createElement("script");
+    localConfig.src = "/src/scripts/config.js";
+    localConfig.onload = () => loadWeather();
+    localConfig.onerror = () => loadWeather();
+    document.head.append(localConfig);
+  }
+  initializeWeather();
 })();
