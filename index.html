@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>TambaClima</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/public/icon.png" />
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="/src/styles/colors.css" />
+    <link rel="stylesheet" href="/src/styles/style.css" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest"></script>
+  </head>
+  <body>
+    <nav class="nav-bar">
+      <div class="nav-container">
+        <a href="#inicio" class="brand">
+          <svg
+            class="brand-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="9.5" class="icon-bg" />
+            <path d="M12 2.5A9.5 9.5 0 1 1 6.4 4.3" class="icon-ring" />
+            <line x1="12" y1="2.5" x2="12" y2="21.5" class="icon-axis" />
+            <circle cx="12" cy="12" r="2.8" class="icon-dot" />
+          </svg>
+          <span>Tambaclima</span>
+        </a>
+
+        <ul class="nav-links">
+          <li><a href="#inicio">Início</a></li>
+          <li><a href="#amazonia">Amazônia</a></li>
+          <li><a href="#clima">Clima Detalhado</a></li>
+        </ul>
+
+        <div
+          class="live-badge is-loading"
+          id="api-status"
+          role="status"
+          aria-live="polite"
+        >
+          <span class="live-dot" id="api-status-dot"></span>
+          <span id="api-status-label">VERIFICANDO</span>
+        </div>
+      </div>
+    </nav>
+
+    <section class="hero" id="inicio" aria-labelledby="hero-title">
+      <h1 class="visually-hidden" id="hero-title">
+        Clima atual de Manaus, Amazonas
+      </h1>
+      <div class="hero-atmosphere" aria-hidden="true">
+        <span class="orb orb-one"></span>
+        <span class="orb orb-two"></span>
+        <div class="hero-grid"></div>
+        <svg class="hero-leaf hero-leaf-one" viewBox="0 0 240 300" fill="none">
+          <path d="M18 270C24 160 83 48 216 20C226 139 172 255 18 270Z" />
+          <path
+            d="M20 270C91 207 143 133 216 20M80 214L64 128M126 169L117 91M164 126L177 74"
+          />
+        </svg>
+        <svg class="hero-leaf hero-leaf-two" viewBox="0 0 240 300" fill="none">
+          <path d="M18 270C24 160 83 48 216 20C226 139 172 255 18 270Z" />
+          <path
+            d="M20 270C91 207 143 133 216 20M80 214L64 128M126 169L117 91M164 126L177 74"
+          />
+        </svg>
+      </div>
+
+      <div class="hero-container">
+        <div class="hero-copy">
+          <div class="hero-location" aria-label="Localização dos dados">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
+              <circle cx="12" cy="10" r="2.5" />
+            </svg>
+            <span id="weather-location">Manaus — Amazonas, Brasil</span>
+          </div>
+          <div class="hero-temperature-row">
+            <div class="hero-temperature" id="temperature" aria-live="polite">
+              —<span>°C</span>
+            </div>
+            <span class="weather-status" id="weather-status" role="status"
+              ><i></i> CARREGANDO</span
+            >
+          </div>
+          <div class="hero-condition">
+            <span class="condition-icon" id="weather-symbol" aria-hidden="true"
+              >☁️</span
+            >
+            <span id="weather-description">Carregando condições...</span>
+          </div>
+          <div class="hero-metrics" aria-label="Métricas atuais">
+            <div class="hero-metric">
+              <span>SENSAÇÃO</span><strong id="feels-like">—°C</strong>
+            </div>
+            <div class="hero-metric">
+              <span>UMIDADE</span><strong id="humidity">—%</strong>
+            </div>
+            <div class="hero-metric">
+              <span>VENTO</span><strong id="wind">— km/h</strong>
+            </div>
+            <div class="hero-metric">
+              <span>CHUVA</span><strong id="rain-chance">—%</strong>
+            </div>
+          </div>
+          <div class="hero-divider"></div>
+          <aside class="weather-alert" id="weather-alert" hidden>
+            <span aria-hidden="true">⚠</span>
+            <div>
+              <strong id="alert-title">ALERTA CLIMÁTICO</strong>
+              <p id="alert-message"></p>
+            </div>
+          </aside>
+          <p class="weather-error" id="weather-error" hidden></p>
+        </div>
+
+        <div class="hero-side" aria-label="Indicadores meteorológicos">
+          <section class="uv-card" aria-labelledby="uv-title">
+            <div class="indicator-heading">
+              <span id="uv-title">ÍNDICE UV</span
+              ><span aria-hidden="true">☀️</span>
+            </div>
+            <div class="uv-reading">
+              <strong id="uv-index">—</strong
+              ><span id="uv-level">Aguardando dados</span>
+            </div>
+            <div
+              class="uv-scale"
+              role="meter"
+              aria-label="Índice ultravioleta"
+              aria-valuemin="0"
+              aria-valuemax="11"
+              aria-valuenow="0"
+              id="uv-meter"
+            >
+              <span id="uv-scale-fill"></span>
+            </div>
+            <div class="uv-legend">
+              <span>Baixo</span><span>Mod.</span><span>Alto</span
+              ><span>M. Alto</span><span>Ext.</span>
+            </div>
+          </section>
+          <div class="hero-side-cards">
+            <section class="mini-indicator">
+              <span>PRESSÃO ATM.</span><strong id="pressure">— hPa</strong>
+            </section>
+            <section class="mini-indicator">
+              <span>ÚLT. ATUALIZ.</span><strong id="weather-updated">—</strong>
+            </section>
+          </div>
+          <button class="refresh-button" id="refresh-weather" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20 7v5h-5M4 17v-5h5" />
+              <path
+                d="M5.5 9a7 7 0 0 1 11.8-2L20 12M4 12l2.7 5a7 7 0 0 0 11.8-2"
+              />
+            </svg>
+            Atualizar dados
+          </button>
+        </div>
+        <a class="hero-scroll" href="#amazonia"
+          ><span>EXPLORAR</span><b aria-hidden="true">⌄</b></a
+        >
+      </div>
+    </section>
+
+    <section
+      class="curiosities"
+      id="amazonia"
+      aria-labelledby="curiosities-title"
+    >
+      <div class="curiosities__inner">
+        <header class="curiosities__header">
+          <p class="curiosities__eyebrow">
+            <svg
+              class="curiosities__eyebrow-icon"
+              width="14"
+              height="14"
+              viewBox="0 0 14 14"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M6.99575 0.99939C10.4936 0.99939 12.9921 3.99757 12.9921 6.99575C12.9921 9.99393 10.4936 12.9921 6.99575 12.9921C3.49787 12.9921 0.99939 9.99393 0.99939 6.99575C0.99939 3.99757 3.49787 0.99939 6.99575 0.99939Z"
+                fill="currentColor"
+                fill-opacity="0.12"
+                stroke="currentColor"
+                stroke-width="1.24924"
+              />
+              <path
+                d="M6.99573 3.99756V6.99574L8.99451 8.99452"
+                stroke="currentColor"
+                stroke-width="1.24924"
+                stroke-linecap="round"
+              />
+            </svg>
+            <span>Ecossistema Amazônico</span>
+          </p>
+          <h2 class="curiosities__title" id="curiosities-title">
+            O Clima da Amazônia
+          </h2>
+          <p class="curiosities__lead">
+            A maior floresta tropical do mundo abriga fenômenos climáticos
+            únicos que regulam o regime de chuvas em todo o continente
+            sul-americano.
+          </p>
+        </header>
+
+        <ul class="curiosities__grid">
+          <li class="curiosity-card curiosity-card--blue">
+            <div class="curiosity-card__top">
+              <p class="curiosity-card__stat">
+                <span class="curiosity-card__value numeric-value">20bi</span>
+                <span class="curiosity-card__unit">ton/dia</span>
+              </p>
+              <span class="curiosity-card__icon">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 18 18"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M16.9975 8.99876C16.9975 13.4163 13.4163 16.9975 8.99876 16.9975C4.58116 16.9975 1 13.4163 1 8.99876C1 4.58116 4.58116 1 8.99876 1C13.4163 1 16.9975 4.58116 16.9975 8.99876Z"
+                    stroke="currentColor"
+                    stroke-width="1.49977"
+                  />
+                  <path
+                    d="M8.9986 5.99907V8.99907L10.9986 10.9991"
+                    stroke="currentColor"
+                    stroke-width="1.49977"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </span>
+            </div>
+            <h3 class="curiosity-card__title">Rios Voadores</h3>
+            <p class="curiosity-card__text">
+              A floresta transpira 20 bilhões de toneladas de água por dia,
+              criando correntes de vapor invisíveis que abastecem chuvas em todo
+              o Brasil e América do Sul.
+            </p>
+            <p class="curiosity-card__source">
+              INPA · Instituto Nacional de Pesquisas da Amazônia
+            </p>
+          </li>
+
+          <li class="curiosity-card curiosity-card--green">
+            <div class="curiosity-card__top">
+              <p class="curiosity-card__stat">
+                <span class="curiosity-card__value numeric-value">85%</span>
+                <span class="curiosity-card__unit">umidade</span>
+              </p>
+              <span class="curiosity-card__icon">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 18 18"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M16.9975 8.99876C16.9975 13.4163 13.4163 16.9975 8.99876 16.9975C4.58116 16.9975 1 13.4163 1 8.99876C1 4.58116 4.58116 1 8.99876 1C13.4163 1 16.9975 4.58116 16.9975 8.99876Z"
+                    stroke="currentColor"
+                    stroke-width="1.49977"
+                  />
+                  <path
+                    d="M8.9986 5.99907V8.99907L10.9986 10.9991"
+                    stroke="currentColor"
+                    stroke-width="1.49977"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </span>
+            </div>
+            <h3 class="curiosity-card__title">Umidade da Floresta</h3>
+            <p class="curiosity-card__text">
+              A umidade relativa pode atingir 85% nas manhãs chuvosas. Esse
+              índice sustenta a maior biodiversidade do planeta e regula o
+              microclima florestal com precisão milimétrica.
+            </p>
+            <p class="curiosity-card__source">
+              INMET · Instituto Nacional de Meteorologia
+            </p>
+          </li>
+
+          <li class="curiosity-card curiosity-card--purple">
+            <div class="curiosity-card__top">
+              <p class="curiosity-card__stat">
+                <span class="curiosity-card__value numeric-value">2.300</span>
+                <span class="curiosity-card__unit">mm/ano</span>
+              </p>
+              <span class="curiosity-card__icon">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 18 18"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M16.9975 8.99876C16.9975 13.4163 13.4163 16.9975 8.99876 16.9975C4.58116 16.9975 1 13.4163 1 8.99876C1 4.58116 4.58116 1 8.99876 1C13.4163 1 16.9975 4.58116 16.9975 8.99876Z"
+                    stroke="currentColor"
+                    stroke-width="1.49977"
+                  />
+                  <path
+                    d="M8.9986 5.99907V8.99907L10.9986 10.9991"
+                    stroke="currentColor"
+                    stroke-width="1.49977"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </span>
+            </div>
+            <h3 class="curiosity-card__title">Precipitação em Manaus</h3>
+            <p class="curiosity-card__text">
+              Manaus recebe em média 2.300mm de chuva por ano. O pico ocorre
+              entre dezembro e março (estação chuvosa) e a estiagem acontece de
+              junho a setembro.
+            </p>
+            <p class="curiosity-card__source">
+              SIPAM · Sistema de Proteção da Amazônia
+            </p>
+          </li>
+
+          <li class="curiosity-card curiosity-card--orange">
+            <div class="curiosity-card__top">
+              <p class="curiosity-card__stat">
+                <span class="curiosity-card__value numeric-value">+5°C</span>
+                <span class="curiosity-card__unit">diferença</span>
+              </p>
+              <span class="curiosity-card__icon">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 18 18"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M16.9975 8.99876C16.9975 13.4163 13.4163 16.9975 8.99876 16.9975C4.58116 16.9975 1 13.4163 1 8.99876C1 4.58116 4.58116 1 8.99876 1C13.4163 1 16.9975 4.58116 16.9975 8.99876Z"
+                    stroke="currentColor"
+                    stroke-width="1.49977"
+                  />
+                  <path
+                    d="M8.9986 5.99907V8.99907L10.9986 10.9991"
+                    stroke="currentColor"
+                    stroke-width="1.49977"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </span>
+            </div>
+            <h3 class="curiosity-card__title">Ilha de Calor Urbana</h3>
+            <p class="curiosity-card__text">
+              O centro de Manaus pode ser até 5°C mais quente que as áreas
+              florestadas ao redor. A urbanização sem planejamento verde
+              intensifica o desconforto térmico urbano.
+            </p>
+            <p class="curiosity-card__source">
+              INPA · Grupo de Climatologia Urbana
+            </p>
+          </li>
+        </ul>
+
+        <aside class="curiosities__note">
+          <svg
+            class="curiosities__note-icon"
+            width="40"
+            height="40"
+            viewBox="0 0 40 40"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              opacity="0.3"
+              d="M39 20C39 30.4934 30.4934 39 20 39C9.50659 39 1 30.4934 1 20C1 9.50659 9.50659 1 20 1C30.4934 1 39 9.50659 39 20Z"
+              stroke="currentColor"
+            />
+            <path
+              d="M12 28C12 22 16 14 20 14C24 14 28 22 28 28"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+            <path
+              opacity="0.6"
+              d="M20 16.5C21.3807 16.5 22.5 15.3807 22.5 14C22.5 12.6193 21.3807 11.5 20 11.5C18.6193 11.5 17.5 12.6193 17.5 14C17.5 15.3807 18.6193 16.5 20 16.5Z"
+              fill="currentColor"
+            />
+            <path
+              opacity="0.4"
+              d="M16 28C16 24 18 20 20 20C22 20 24 24 24 28"
+              stroke="currentColor"
+              stroke-linecap="round"
+            />
+          </svg>
+          <div class="curiosities__note-body">
+            <p class="curiosities__note-title">
+              Sabia que a Amazônia é o "termostato" da América do Sul?
+            </p>
+            <p class="curiosities__note-text">
+              Sem a floresta amazônica, o regime de chuvas de estados como São
+              Paulo, Minas Gerais e Rio de Janeiro seria drasticamente reduzido,
+              afetando abastecimento de água e produção agrícola de todo o país.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="clima" class="meteorologic-pannel">
+      <div class="content">
+        <header>
+          <div class="tag">
+            <i
+              data-lucide="search"
+              style="width: 14px; height: 14px; stroke-width: 3"
+            ></i>
+            Consulta meteorológica
+          </div>
+          <h2>Clima Detalhado</h2>
+          <p class="desc">
+            Métricas meteorológicas aprofundadas para as capitais brasileiras em
+            tempo real.
+          </p>
+          <div class="capital-search">
+            <input
+              id="capital-search-input"
+              type="search"
+              placeholder="Buscar capital brasileira..."
+              autocomplete="off"
+              role="combobox"
+              aria-autocomplete="list"
+              aria-expanded="false"
+              aria-controls="capital-options"
+              aria-label="Buscar uma capital brasileira"
+            />
+            <div
+              id="capital-options"
+              class="capital-options"
+              role="listbox"
+              hidden
+            ></div>
+          </div>
+          <p
+            id="capital-search-status"
+            class="capital-search-status"
+            aria-live="polite"
+          ></p>
+        </header>
+
+        <section class="main-card">
+          <div class="weather">
+            <i data-lucide="cloud-sun" class="icon"></i>
+            <div>
+              <b id="panel-temperature">—°C</b>
+              <span
+                ><strong id="panel-city">Manaus, AM</strong> —
+                <span id="panel-description">Carregando clima…</span></span
+              >
+            </div>
+          </div>
+          <div class="alert">
+            <i data-lucide="triangle-alert"></i>
+            <p>
+              <strong id="panel-alert-title">Alerta climático</strong>
+              <span id="panel-alert-message"
+                >Selecione uma capital para consultar as condições.</span
+              >
+            </p>
+          </div>
+        </section>
+
+        <section class="cards">
+          <div
+            class="card"
+            style="--c: #38bdf8; --w: 0%"
+            data-metric="humidity"
+          >
+            <div class="card-top">
+              <span>Umidade relativa</span><i data-lucide="droplet"></i>
+            </div>
+            <div class="card-val" id="panel-humidity">—%</div>
+            <div class="bar"></div>
+            <div class="card-status" id="panel-humidity-status">—</div>
+          </div>
+
+          <div class="card" style="--c: #ef4444; --w: 0%" data-metric="uv">
+            <div class="card-top">
+              <span>Índice UV</span><i data-lucide="sun"></i>
+            </div>
+            <div class="card-val red" id="panel-uv">—</div>
+            <div class="bar"></div>
+            <div class="card-status" id="panel-uv-status">—</div>
+          </div>
+
+          <div class="card" style="--c: #a78bfa; --w: 0%" data-metric="wind">
+            <div class="card-top">
+              <span>Vel. do vento</span><i data-lucide="wind"></i>
+            </div>
+            <div class="card-val" id="panel-wind">— <small>km/h</small></div>
+            <div class="bar"></div>
+            <div class="card-status" id="panel-wind-status">—</div>
+          </div>
+
+          <div
+            class="card"
+            style="--c: #facc15; --w: 0%"
+            data-metric="pressure"
+          >
+            <div class="card-top">
+              <span>Pressão atm.</span><i data-lucide="gauge"></i>
+            </div>
+            <div class="card-val" id="panel-pressure">— <small>hPa</small></div>
+            <div class="bar"></div>
+            <div class="card-status" id="panel-pressure-status">—</div>
+          </div>
+
+          <div class="card" style="--c: #3b82f6; --w: 0%" data-metric="rain">
+            <div class="card-top">
+              <span>Chance de chuva</span><i data-lucide="cloud-rain"></i>
+            </div>
+            <div class="card-val" id="panel-rain">—%</div>
+            <div class="bar"></div>
+            <div class="card-status" id="panel-rain-status">—</div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-container">
+        <a href="#inicio" class="brand">
+          <svg
+            class="brand-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="9.5" class="icon-bg" />
+            <path d="M12 2.5A9.5 9.5 0 1 1 6.4 4.3" class="icon-ring" />
+            <line x1="12" y1="2.5" x2="12" y2="21.5" class="icon-axis" />
+            <circle cx="12" cy="12" r="2.8" class="icon-dot" />
+          </svg>
+          <span>Tambaclima</span>
+        </a>
+
+        <p class="footer-info">
+          Dados meteorológicos em tempo real &middot; Amazônia, Brasil
+        </p>
+
+        <ul class="footer-links">
+          <li><a href="#inicio">Início</a></li>
+          <li><a href="#amazonia">Amazônia</a></li>
+          <li><a href="#clima">Clima</a></li>
+        </ul>
+      </div>
+    </footer>
+
+    <script src="/src/scripts/script.js" defer></script>
+    <script>
+      if (window.lucide) lucide.createIcons();
+    </script>
+  </body>
+</html>
