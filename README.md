@@ -1,5 +1,11 @@
 # 🌤️ Tambaclima
 
+## Executar localmente
+
+Abra `index.html` com a extensão Live Server do VS Code. Para a consulta funcionar, informe a chave Weatherbit em `src/scripts/config.js` (use `config.example.js` como modelo). Esse arquivo é local e está ignorado pelo Git.
+
+O navegador consulta diretamente a Weatherbit. Como o Live Server é estático, ele não lê o `.env`; a chave precisa estar na configuração JavaScript do navegador e fica visível para qualquer pessoa que inspecionar o site publicado. Para um site público, use uma chave com limites de uso apropriados ou um proxy de API.
+
 O **Tambaclima** é uma *landing page* web responsiva desenvolvida para exibir dados meteorológicos em tempo real da cidade de Manaus, além de apresentar um painel educativo sobre o clima e as curiosidades ambientais da região amazônica.
 
 ## 🚀 Funcionalidades
