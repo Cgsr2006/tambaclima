@@ -1090,6 +1090,67 @@ input:focus {
   font-size: 11px;
   font-weight: 500;
 }
+.capital-search {
+  position: relative;
+  z-index: 5;
+  width: min(100%, 448px);
+}
+.capital-search input {
+  display: block;
+  width: 100%;
+  max-width: none;
+}
+.capital-search input::-webkit-search-cancel-button { cursor: pointer; }
+.capital-options {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  max-height: 390px;
+  overflow-y: auto;
+  background: #0b1d14;
+  border: 1px solid #1e3d2c;
+  border-radius: 12px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+}
+.capital-options[hidden] { display: none; }
+.capital-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  padding: 13px 16px;
+  color: #e8f5ee;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid rgba(74, 110, 88, 0.3);
+  text-align: left;
+  font: 600 0.88rem "Outfit", sans-serif;
+  cursor: pointer;
+}
+.capital-option:last-child { border-bottom: 0; }
+.capital-option:hover, .capital-option:focus-visible {
+  background: #173326;
+  outline: none;
+}
+.capital-option small {
+  color: #6b9e82;
+  font: 500 0.7rem "JetBrains Mono", monospace;
+}
+.capital-option-empty {
+  padding: 16px;
+  color: #9ec4b0;
+  font-size: 0.84rem;
+}
+.capital-search-status {
+  min-height: 1.1rem;
+  margin: 8px 0 0;
+  color: #6b9e82;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
 /* ==================== Estilizações Footer ==================== */
 
 .footer {
@@ -1135,6 +1196,344 @@ input:focus {
 
 .footer-links a:hover {
   color: #ffffff;
+}
+
+/* Hero climática: composição alinhada à referência visual. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.hero {
+  min-height: min(900px, 100svh);
+  min-height: max(690px, min(900px, 100svh));
+  align-items: stretch;
+  padding: clamp(88px, 12vh, 130px) clamp(20px, 5.5vw, 76px) 88px;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(3, 17, 13, 0.95) 0%,
+      rgba(4, 20, 15, 0.76) 48%,
+      rgba(4, 20, 15, 0.78) 100%
+    ),
+    linear-gradient(0deg, rgba(3, 17, 13, 0.7), rgba(3, 17, 13, 0.35)),
+    url("https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=2200&q=85")
+      center 48% / cover,
+    #061410;
+}
+.hero::before {
+  display: none;
+}
+.hero-atmosphere {
+  z-index: -1;
+}
+.hero-container {
+  width: min(1440px, 100%);
+  grid-template-columns: minmax(0, 1.25fr) minmax(330px, 0.8fr);
+  align-content: center;
+  align-items: center;
+  column-gap: clamp(40px, 5.3vw, 78px);
+}
+.hero-copy {
+  max-width: 760px;
+}
+.hero-location {
+  margin: 0 0 26px;
+  color: var(--color-primary);
+  font:
+    600 0.72rem "Outfit",
+    sans-serif;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.hero-location svg {
+  flex: 0 0 17px;
+}
+.hero-temperature-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+}
+.hero-temperature {
+  color: var(--color-text-primary);
+  font:
+    700 clamp(6rem, 12vw, 9rem)/0.88 "Outfit",
+    sans-serif;
+  letter-spacing: -0.075em;
+}
+.hero-temperature span {
+  display: inline-block;
+  margin: 0.12em 0 0 0.12em;
+  color: var(--color-text-muted);
+  font:
+    500 0.36em "Outfit",
+    sans-serif;
+  letter-spacing: -0.04em;
+  vertical-align: top;
+}
+.hero-temperature-row .weather-status {
+  margin-top: 6px;
+}
+.hero-condition {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 13px;
+  color: var(--color-text-secondary);
+  font:
+    500 1rem "Outfit",
+    sans-serif;
+}
+.condition-icon {
+  font-size: 1.45rem;
+}
+.hero-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, max-content);
+  gap: clamp(18px, 2.7vw, 38px);
+  margin-top: 40px;
+}
+.hero-metric {
+  display: grid;
+  gap: 8px;
+}
+.hero-metric span,
+.indicator-heading,
+.mini-indicator > span {
+  color: var(--color-text-muted);
+  font:
+    600 0.62rem "JetBrains Mono",
+    monospace;
+  letter-spacing: 0.12em;
+}
+.hero-metric strong {
+  color: var(--color-text-primary);
+  font:
+    600 1rem "JetBrains Mono",
+    monospace;
+  white-space: nowrap;
+}
+.hero-divider {
+  height: 1px;
+  margin: 38px 0 35px;
+  background: rgba(158, 196, 176, 0.18);
+}
+.weather-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  max-width: 650px;
+  padding: 15px 18px;
+  color: #ff9d2e;
+  background: rgba(92, 49, 9, 0.28);
+  border: 1px solid rgba(249, 115, 22, 0.4);
+  border-radius: 13px;
+}
+.weather-alert[hidden],
+.weather-error[hidden] {
+  display: none;
+}
+.weather-alert > span {
+  font-size: 1.15rem;
+}
+.weather-alert strong {
+  font:
+    700 0.66rem "JetBrains Mono",
+    monospace;
+  letter-spacing: 0.12em;
+}
+.weather-alert p {
+  margin-top: 5px;
+  color: #f0c99f;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+.weather-error {
+  margin-top: 14px;
+  color: #ffb6a9;
+  font-size: 0.8rem;
+}
+.hero-side {
+  display: grid;
+  gap: 14px;
+  width: 100%;
+  max-width: 470px;
+  justify-self: end;
+}
+.uv-card,
+.mini-indicator {
+  border: 1px solid rgba(79, 132, 98, 0.3);
+  background: rgba(10, 32, 23, 0.82);
+  backdrop-filter: blur(14px);
+}
+.uv-card {
+  padding: 22px;
+  border-radius: 17px;
+}
+.indicator-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.uv-reading {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 10px 0 14px;
+}
+.uv-reading strong {
+  color: var(--color-danger);
+  font:
+    700 3rem/1 "JetBrains Mono",
+    monospace;
+}
+.uv-reading span {
+  color: var(--color-danger);
+  font:
+    600 0.9rem "Outfit",
+    sans-serif;
+}
+.uv-scale {
+  height: 9px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(109, 145, 122, 0.2);
+}
+.uv-scale span {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    #22c55e,
+    #eab308 42%,
+    #f97316 65%,
+    #ef4444 82%,
+    #a855f7
+  );
+  transition: width 0.35s ease;
+}
+.uv-legend {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  color: rgba(158, 196, 176, 0.55);
+  font:
+    0.52rem "JetBrains Mono",
+    monospace;
+}
+.hero-side-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.mini-indicator {
+  display: grid;
+  gap: 9px;
+  min-width: 0;
+  padding: 16px;
+  border-radius: 13px;
+}
+.mini-indicator strong {
+  overflow: hidden;
+  color: var(--color-primary);
+  font:
+    600 0.83rem "JetBrains Mono",
+    monospace;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mini-indicator:first-child strong {
+  color: #fbbf24;
+}
+.refresh-button {
+  justify-self: end;
+}
+.hero-scroll {
+  bottom: 23px;
+  left: 50%;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  transform: translateX(-50%);
+  font-size: 0.56rem;
+}
+.hero-scroll span {
+  width: auto;
+  height: auto;
+  background: transparent;
+}
+.hero-scroll b {
+  font-size: 1.3rem;
+  font-weight: 400;
+  line-height: 0.7;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    min-height: auto;
+    padding: 80px 6vw 85px;
+  }
+  .hero-container {
+    grid-template-columns: 1fr;
+    max-width: 700px;
+    gap: 38px;
+  }
+  .hero-side {
+    justify-self: stretch;
+    max-width: none;
+  }
+  .hero-scroll {
+    position: static;
+    grid-column: 1;
+    transform: none;
+    margin-top: 10px;
+  }
+}
+@media (max-width: 560px) {
+  .hero {
+    padding: 62px 20px 40px;
+  }
+  .hero-temperature {
+    font-size: clamp(5.2rem, 25vw, 7rem);
+  }
+  .hero-temperature-row {
+    gap: 12px;
+  }
+  .hero-temperature-row .weather-status {
+    margin-top: 0;
+    font-size: 0.48rem;
+  }
+  .hero-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 18px;
+    margin-top: 30px;
+  }
+  .hero-divider {
+    margin: 28px 0 24px;
+  }
+  .uv-card {
+    padding: 19px;
+  }
+  .mini-indicator {
+    padding: 13px 11px;
+  }
+  .mini-indicator > span {
+    font-size: 0.52rem;
+  }
+  .mini-indicator strong {
+    font-size: 0.72rem;
+  }
+  .refresh-button {
+    justify-self: center;
+  }
 }
 
 @media (max-width: 768px) {
