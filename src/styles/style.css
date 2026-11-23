@@ -650,6 +650,235 @@ h6 {
 }
 
 /* ==================== Estilizações Curiosities ==================== */
+.curiosities {
+  /* Apelidos locais para variáveis existentes em colors.css */
+  --curiosity-purple: var(--color-storm);
+  --curiosity-orange: var(--color-uv-high);
+  --curiosity-faint: var(--color-border-secondary);
+
+  padding: clamp(64px, 8vw, 96px) 6vw;
+}
+
+.curiosities__inner {
+  width: 100%;
+  max-width: 1162px;
+  margin: 0 auto;
+}
+
+/* ---------- Cabeçalho ---------- */
+.curiosities__header {
+  max-width: 672px;
+}
+
+.curiosities__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-primary);
+  font:
+    700 0.72rem/1.5 "Outfit",
+    sans-serif;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.curiosities__eyebrow-icon {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+}
+
+.curiosities__title {
+  padding-top: 20px;
+  color: var(--color-text-primary);
+  font:
+    800 clamp(2.25rem, 6vw, 3.25rem)/1.05 "Outfit",
+    sans-serif;
+  letter-spacing: -0.04em;
+}
+
+.curiosities__lead {
+  margin-top: 16px;
+  color: var(--color-text-muted);
+  font:
+    400 1rem/1.75 "Inter",
+    sans-serif;
+}
+
+/* ---------- Grid de cards ---------- */
+.curiosities__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 64px;
+  padding: 0;
+  list-style: none;
+}
+
+/* ---------- Card ---------- */
+.curiosity-card {
+  --accent: var(--color-secondary);
+
+  display: flex;
+  flex-direction: column;
+  padding: 32px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+}
+
+.curiosity-card--blue {
+  --accent: var(--color-secondary);
+}
+.curiosity-card--green {
+  --accent: var(--color-primary);
+}
+.curiosity-card--purple {
+  --accent: var(--curiosity-purple);
+}
+.curiosity-card--orange {
+  --accent: var(--curiosity-orange);
+}
+
+.curiosity-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  height: 41.26px;
+}
+
+.curiosity-card__stat {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* font-family vem de .numeric-value (JetBrains Mono) */
+.curiosity-card__value {
+  margin-top: -9.36px;
+  color: var(--accent);
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.curiosity-card__unit {
+  margin-top: 19.9px;
+  color: var(--accent);
+  font:
+    500 0.875rem/1.25rem "Outfit",
+    sans-serif;
+  opacity: 0.7;
+  white-space: nowrap;
+}
+
+.curiosity-card__icon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 9%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 19%, transparent);
+  border-radius: 12px;
+}
+
+.curiosity-card__icon svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+.curiosity-card__title {
+  margin-top: 24px;
+  color: var(--color-text-primary);
+  font:
+    700 1.25rem/1.5 "Outfit",
+    sans-serif;
+}
+
+.curiosity-card__text {
+  margin-top: 12px;
+  color: var(--color-text-secondary);
+  font:
+    400 0.9rem/1.7 "Inter",
+    sans-serif;
+}
+
+.curiosity-card__source {
+  margin-top: 16px;
+  color: var(--curiosity-faint);
+  font:
+    400 0.75rem/1rem "JetBrains Mono",
+    monospace;
+}
+
+/* ---------- Card informativo ---------- */
+.curiosities__note {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 40px;
+  padding: 24px;
+  background: color-mix(in srgb, var(--color-secondary) 6%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-secondary) 15%, transparent);
+  border-radius: 16px;
+}
+
+.curiosities__note-icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  color: var(--color-secondary);
+}
+
+.curiosities__note-body {
+  min-width: 0;
+}
+
+.curiosities__note-title {
+  color: var(--color-secondary);
+  font:
+    700 0.85rem/1.5 "Outfit",
+    sans-serif;
+}
+
+.curiosities__note-text {
+  margin-top: 4px;
+  color: var(--color-text-muted);
+  font:
+    400 0.875rem/1.6 "Inter",
+    sans-serif;
+}
+
+/* ---------- Tablet: 2 colunas, espaçamento compacto ---------- */
+@media (max-width: 900px) {
+  .curiosities__grid {
+    gap: 16px;
+  }
+
+  .curiosity-card {
+    padding: 24px;
+  }
+}
+
+/* ---------- Celular: 1 coluna ---------- */
+@media (max-width: 700px) {
+  .curiosities__grid {
+    grid-template-columns: 1fr;
+    margin-top: 40px;
+  }
+
+  .curiosities__note {
+    align-items: flex-start;
+    margin-top: 32px;
+    padding: 20px;
+  }
+}
 
 /* ==================== Estilizações Climatic Panel ==================== */
 * {
