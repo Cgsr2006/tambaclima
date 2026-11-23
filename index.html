@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -23,178 +23,281 @@
     <script src="https://unpkg.com/lucide@latest"></script>
   </head>
   <body>
-    <main>
-      <nav class="nav-bar"></nav>
+    <nav class="nav-bar">
+      <div class="nav-container">
+        <a href="#inicio" class="brand">
+          <svg
+            class="brand-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="9.5" class="icon-bg" />
+            <path d="M12 2.5A9.5 9.5 0 1 1 6.4 4.3" class="icon-ring" />
+            <line x1="12" y1="2.5" x2="12" y2="21.5" class="icon-axis" />
+            <circle cx="12" cy="12" r="2.8" class="icon-dot" />
+          </svg>
+          <span>Tambaclima</span>
+        </a>
 
-       <section class="hero" id="home" aria-labelledby="hero-title">
-        <div class="hero-atmosphere" aria-hidden="true">
-          <span class="orb orb-one"></span>
-          <span class="orb orb-two"></span>
-          <div class="hero-grid"></div>
-          <svg class="hero-leaf hero-leaf-one" viewBox="0 0 240 300" fill="none">
-            <path d="M18 270C24 160 83 48 216 20C226 139 172 255 18 270Z" />
-            <path d="M20 270C91 207 143 133 216 20M80 214L64 128M126 169L117 91M164 126L177 74" />
-          </svg>
-          <svg class="hero-leaf hero-leaf-two" viewBox="0 0 240 300" fill="none">
-            <path d="M18 270C24 160 83 48 216 20C226 139 172 255 18 270Z" />
-            <path d="M20 270C91 207 143 133 216 20M80 214L64 128M126 169L117 91M164 126L177 74" />
-          </svg>
+        <ul class="nav-links">
+          <li><a href="#inicio">Início</a></li>
+          <li><a href="#amazonia">Amazônia</a></li>
+          <li><a href="#clima">Clima Detalhado</a></li>
+        </ul>
+
+        <div class="live-badge">
+          <span class="live-dot"></span>
+          AO VIVO
+        </div>
+      </div>
+    </nav>
+
+    <section class="hero" id="home" aria-labelledby="hero-title">
+      <div class="hero-atmosphere" aria-hidden="true">
+        <span class="orb orb-one"></span>
+        <span class="orb orb-two"></span>
+        <div class="hero-grid"></div>
+        <svg class="hero-leaf hero-leaf-one" viewBox="0 0 240 300" fill="none">
+          <path d="M18 270C24 160 83 48 216 20C226 139 172 255 18 270Z" />
+          <path
+            d="M20 270C91 207 143 133 216 20M80 214L64 128M126 169L117 91M164 126L177 74"
+          />
+        </svg>
+        <svg class="hero-leaf hero-leaf-two" viewBox="0 0 240 300" fill="none">
+          <path d="M18 270C24 160 83 48 216 20C226 139 172 255 18 270Z" />
+          <path
+            d="M20 270C91 207 143 133 216 20M80 214L64 128M126 169L117 91M164 126L177 74"
+          />
+        </svg>
+      </div>
+
+      <div class="hero-container">
+        <div class="hero-copy">
+          <div class="hero-eyebrow">
+            <span class="eyebrow-dot"></span> CLIMA E AMAZÔNIA EM FOCO
+          </div>
+          <h1 id="hero-title">
+            O clima de Manaus,<br /><span>em tempo real.</span>
+          </h1>
+          <p class="hero-description">
+            Acompanhe as condições meteorológicas da capital amazonense e
+            descubra como o clima se conecta à vida e ao equilíbrio da Floresta
+            Amazônica.
+          </p>
+          <div class="hero-location">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
+              <circle cx="12" cy="10" r="2.5" />
+            </svg>
+            <span>Manaus, Amazonas — Brasil</span>
+          </div>
+          <a class="hero-cta" href="#clima-detalhado">
+            Explorar condições climáticas
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </a>
         </div>
 
-        <div class="hero-container">
-          <div class="hero-copy">
-            <div class="hero-eyebrow"><span class="eyebrow-dot"></span> CLIMA E AMAZÔNIA EM FOCO</div>
-            <h1 id="hero-title">O clima de Manaus,<br /><span>em tempo real.</span></h1>
-            <p class="hero-description">
-              Acompanhe as condições meteorológicas da capital amazonense e descubra
-              como o clima se conecta à vida e ao equilíbrio da Floresta Amazônica.
-            </p>
-            <div class="hero-location">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>
-              <span>Manaus, Amazonas — Brasil</span>
+        <div class="weather-card" aria-label="Resumo do clima atual em Manaus">
+          <div class="weather-card-top">
+            <div>
+              <span class="weather-kicker">CONDIÇÕES ATUAIS</span>
+              <p class="weather-city">Manaus <span>• AM</span></p>
             </div>
-            <a class="hero-cta" href="#clima-detalhado">
-              Explorar condições climáticas
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </a>
+            <span class="weather-status" id="weather-status"
+              ><i></i> AGUARDANDO DADOS</span
+            >
           </div>
 
-          <div class="weather-card" aria-label="Resumo do clima atual em Manaus">
-            <div class="weather-card-top">
-              <div>
-                <span class="weather-kicker">CONDIÇÕES ATUAIS</span>
-                <p class="weather-city">Manaus <span>• AM</span></p>
+          <div class="weather-main">
+            <div class="weather-temperature-wrap">
+              <div class="weather-temperature" id="temperature">
+                —<span>°C</span>
               </div>
-              <span class="weather-status" id="weather-status"><i></i> AGUARDANDO DADOS</span>
-            </div>
-
-            <div class="weather-main">
-              <div class="weather-temperature-wrap">
-                <div class="weather-temperature" id="temperature">—<span>°C</span></div>
-                <p id="weather-description">Carregando condições...</p>
-                <div class="feels-like">Sensação térmica <strong id="feels-like">—°C</strong></div>
-              </div>
-              <div class="weather-symbol" id="weather-symbol" aria-hidden="true">
-                <svg viewBox="0 0 96 96"><circle cx="38" cy="34" r="17"/><path d="M38 7v-5M38 66v-5M11 34H6M70 34h-5M19 15l-4-4M61 57l-4-4M57 15l4-4"/><path class="cloud" d="M25 69c0-8 6-14 14-14 3-10 12-16 22-13 8 2 13 9 13 17 8 0 14 6 14 13s-6 13-14 13H39c-8 0-14-6-14-13Z"/></svg>
+              <p id="weather-description">Carregando condições...</p>
+              <div class="feels-like">
+                Sensação térmica <strong id="feels-like">—°C</strong>
               </div>
             </div>
-
-            <div class="weather-divider"></div>
-            <div class="weather-metrics">
-              <div class="weather-metric">
-                <span class="metric-icon">💧</span>
-                <div><span class="metric-label">UMIDADE</span><strong id="humidity">—<small>%</small></strong></div>
-              </div>
-              <div class="weather-metric">
-                <span class="metric-icon">🌬️</span>
-                <div><span class="metric-label">VENTO</span><strong id="wind">—<small> km/h</small></strong></div>
-              </div>
-              <div class="weather-metric">
-                <span class="metric-icon">☔</span>
-                <div><span class="metric-label">PRECIPITAÇÃO</span><strong id="rain-chance">—<small>%</small></strong></div>
-              </div>
-            </div>
-            <div class="weather-card-footer">
-              <span id="weather-updated">Os dados meteorológicos serão exibidos aqui.</span>
-              <button class="refresh-button" id="refresh-weather" type="button" aria-label="Atualizar dados meteorológicos">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5M5.6 9A7 7 0 0 1 18 6l2 6M4 12l2 6a7 7 0 0 0 12.4-3"/></svg>
-                Atualizar
-              </button>
+            <div class="weather-symbol" id="weather-symbol" aria-hidden="true">
+              <svg viewBox="0 0 96 96">
+                <circle cx="38" cy="34" r="17" />
+                <path
+                  d="M38 7v-5M38 66v-5M11 34H6M70 34h-5M19 15l-4-4M61 57l-4-4M57 15l4-4"
+                />
+                <path
+                  class="cloud"
+                  d="M25 69c0-8 6-14 14-14 3-10 12-16 22-13 8 2 13 9 13 17 8 0 14 6 14 13s-6 13-14 13H39c-8 0-14-6-14-13Z"
+                />
+              </svg>
             </div>
           </div>
-        </div>
 
-        <a class="hero-scroll" href="#amazonia"><span></span> DESCUBRA A AMAZÔNIA</a>
-      </section>
-
-      <section class="curiosities"></section>
-
-      <section class="meteorologic-pannel">
-        <div class="content">
-          <header>
-            <div class="tag">
-              <i
-                data-lucide="search"
-                style="width: 14px; height: 14px; stroke-width: 3"
-              ></i>
-              Consulta meteorológica
-            </div>
-            <h1>Clima Detalhado</h1>
-            <p class="desc">
-              Métricas meteorológicas aprofundadas para as capitais brasileiras
-              em tempo real.
-            </p>
-            <input type="text" placeholder="Buscar capital brasileira..." />
-          </header>
-
-          <section class="main-card">
-            <div class="weather">
-              <i data-lucide="cloud-sun" class="icon"></i>
+          <div class="weather-divider"></div>
+          <div class="weather-metrics">
+            <div class="weather-metric">
+              <span class="metric-icon">💧</span>
               <div>
-                <b>32°C</b>
-                <span><strong>Manaus, AM</strong> — Parcialmente Nublado</span>
+                <span class="metric-label">UMIDADE</span
+                ><strong id="humidity">—<small>%</small></strong>
               </div>
             </div>
-            <div class="alert">
-              <i data-lucide="triangle-alert"></i>
-              <p>
-                <strong>Alerta UV Alto</strong> Evite exposição direta entre 10h
-                e 16h
-              </p>
-            </div>
-          </section>
-
-          <section class="cards">
-            <div class="card" style="--c: #38bdf8; --w: 87%">
-              <div class="card-top">
-                <span>Umidade relativa</span><i data-lucide="droplet"></i>
+            <div class="weather-metric">
+              <span class="metric-icon">🌬️</span>
+              <div>
+                <span class="metric-label">VENTO</span
+                ><strong id="wind">—<small> km/h</small></strong>
               </div>
-              <div class="card-val">87%</div>
-              <div class="bar"></div>
-              <div class="card-status">Muito úmido</div>
             </div>
-
-            <div class="card" style="--c: #ef4444; --w: 80%">
-              <div class="card-top">
-                <span>Índice UV</span><i data-lucide="sun"></i>
+            <div class="weather-metric">
+              <span class="metric-icon">☔</span>
+              <div>
+                <span class="metric-label">PRECIPITAÇÃO</span
+                ><strong id="rain-chance">—<small>%</small></strong>
               </div>
-              <div class="card-val red">8</div>
-              <div class="bar"></div>
-              <div class="card-status">Muito Alto</div>
             </div>
-
-            <div class="card" style="--c: #a78bfa; --w: 30%">
-              <div class="card-top">
-                <span>Vel. do vento</span><i data-lucide="wind"></i>
-              </div>
-              <div class="card-val">14 <small>km/h</small></div>
-              <div class="bar"></div>
-              <div class="card-status">Fraco</div>
-            </div>
-
-            <div class="card" style="--c: #facc15; --w: 60%">
-              <div class="card-top">
-                <span>Pressão atm.</span><i data-lucide="gauge"></i>
-              </div>
-              <div class="card-val">1009 <small>hPa</small></div>
-              <div class="bar"></div>
-              <div class="card-status">Baixa pressão</div>
-            </div>
-
-            <div class="card" style="--c: #3b82f6; --w: 65%">
-              <div class="card-top">
-                <span>Chance de chuva</span><i data-lucide="cloud-rain"></i>
-              </div>
-              <div class="card-val">65%</div>
-              <div class="bar"></div>
-              <div class="card-status">Possível</div>
-            </div>
-          </section>
+          </div>
+          <div class="weather-card-footer">
+            <span id="weather-updated"
+              >Os dados meteorológicos serão exibidos aqui.</span
+            >
+            <button
+              class="refresh-button"
+              id="refresh-weather"
+              type="button"
+              aria-label="Atualizar dados meteorológicos"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M20 7v5h-5M4 17v-5h5M5.6 9A7 7 0 0 1 18 6l2 6M4 12l2 6a7 7 0 0 0 12.4-3"
+                />
+              </svg>
+              Atualizar
+            </button>
+          </div>
         </div>
-      </section>
+      </div>
 
-      <footer class="footer"></footer>
-    </main>
+      <a class="hero-scroll" href="#amazonia"
+        ><span></span> DESCUBRA A AMAZÔNIA</a
+      >
+    </section>
+    <section id="amazonia" class="curiosities"></section>
+
+    <section id="clima" class="meteorologic-pannel">
+      <div class="content">
+        <header>
+          <div class="tag">
+            <i
+              data-lucide="search"
+              style="width: 14px; height: 14px; stroke-width: 3"
+            ></i>
+            Consulta meteorológica
+          </div>
+          <h1>Clima Detalhado</h1>
+          <p class="desc">
+            Métricas meteorológicas aprofundadas para as capitais brasileiras em
+            tempo real.
+          </p>
+          <input type="text" placeholder="Buscar capital brasileira..." />
+        </header>
+
+        <section class="main-card">
+          <div class="weather">
+            <i data-lucide="cloud-sun" class="icon"></i>
+            <div>
+              <b>32°C</b>
+              <span><strong>Manaus, AM</strong> — Parcialmente Nublado</span>
+            </div>
+          </div>
+          <div class="alert">
+            <i data-lucide="triangle-alert"></i>
+            <p>
+              <strong>Alerta UV Alto</strong> Evite exposição direta entre 10h e
+              16h
+            </p>
+          </div>
+        </section>
+
+        <section class="cards">
+          <div class="card" style="--c: #38bdf8; --w: 87%">
+            <div class="card-top">
+              <span>Umidade relativa</span><i data-lucide="droplet"></i>
+            </div>
+            <div class="card-val">87%</div>
+            <div class="bar"></div>
+            <div class="card-status">Muito úmido</div>
+          </div>
+
+          <div class="card" style="--c: #ef4444; --w: 80%">
+            <div class="card-top">
+              <span>Índice UV</span><i data-lucide="sun"></i>
+            </div>
+            <div class="card-val red">8</div>
+            <div class="bar"></div>
+            <div class="card-status">Muito Alto</div>
+          </div>
+
+          <div class="card" style="--c: #a78bfa; --w: 30%">
+            <div class="card-top">
+              <span>Vel. do vento</span><i data-lucide="wind"></i>
+            </div>
+            <div class="card-val">14 <small>km/h</small></div>
+            <div class="bar"></div>
+            <div class="card-status">Fraco</div>
+          </div>
+
+          <div class="card" style="--c: #facc15; --w: 60%">
+            <div class="card-top">
+              <span>Pressão atm.</span><i data-lucide="gauge"></i>
+            </div>
+            <div class="card-val">1009 <small>hPa</small></div>
+            <div class="bar"></div>
+            <div class="card-status">Baixa pressão</div>
+          </div>
+
+          <div class="card" style="--c: #3b82f6; --w: 65%">
+            <div class="card-top">
+              <span>Chance de chuva</span><i data-lucide="cloud-rain"></i>
+            </div>
+            <div class="card-val">65%</div>
+            <div class="bar"></div>
+            <div class="card-status">Possível</div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-container">
+        <a href="#inicio" class="brand">
+          <svg
+            class="brand-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="9.5" class="icon-bg" />
+            <path d="M12 2.5A9.5 9.5 0 1 1 6.4 4.3" class="icon-ring" />
+            <line x1="12" y1="2.5" x2="12" y2="21.5" class="icon-axis" />
+            <circle cx="12" cy="12" r="2.8" class="icon-dot" />
+          </svg>
+          <span>Tambaclima</span>
+        </a>
+
+        <p class="footer-info">
+          Dados meteorológicos em tempo real &middot; Amazônia, Brasil
+        </p>
+
+        <ul class="footer-links">
+          <li><a href="#inicio">Início</a></li>
+          <li><a href="#amazonia">Amazônia</a></li>
+          <li><a href="#clima">Clima</a></li>
+        </ul>
+      </div>
+    </footer>
 
     <script>
       lucide.createIcons();
