@@ -20,6 +20,7 @@
       href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
+    <script src="https://unpkg.com/lucide@latest"></script>
   </head>
   <body>
     <nav class="nav-bar">
@@ -49,11 +50,93 @@
 
     <section id="inicio" class="hero"></section>
 
-    <section id="amazonia" class="curiosities"></section>
+      <section id="amazonia" class="curiosities"></section>
 
-    <section id="clima" class="meteorologic-pannel"></section>
+      <section id="clima" class="meteorologic-pannel">
+        <div class="content">
+          <header>
+            <div class="tag">
+              <i
+                data-lucide="search"
+                style="width: 14px; height: 14px; stroke-width: 3"
+              ></i>
+              Consulta meteorológica
+            </div>
+            <h1>Clima Detalhado</h1>
+            <p class="desc">
+              Métricas meteorológicas aprofundadas para as capitais brasileiras
+              em tempo real.
+            </p>
+            <input type="text" placeholder="Buscar capital brasileira..." />
+          </header>
 
-    <footer class="footer">
+          <section class="main-card">
+            <div class="weather">
+              <i data-lucide="cloud-sun" class="icon"></i>
+              <div>
+                <b>32°C</b>
+                <span><strong>Manaus, AM</strong> — Parcialmente Nublado</span>
+              </div>
+            </div>
+            <div class="alert">
+              <i data-lucide="triangle-alert"></i>
+              <p>
+                <strong>Alerta UV Alto</strong> Evite exposição direta entre 10h
+                e 16h
+              </p>
+            </div>
+          </section>
+
+          <section class="cards">
+            <div class="card" style="--c: #38bdf8; --w: 87%">
+              <div class="card-top">
+                <span>Umidade relativa</span><i data-lucide="droplet"></i>
+              </div>
+              <div class="card-val">87%</div>
+              <div class="bar"></div>
+              <div class="card-status">Muito úmido</div>
+            </div>
+
+            <div class="card" style="--c: #ef4444; --w: 80%">
+              <div class="card-top">
+                <span>Índice UV</span><i data-lucide="sun"></i>
+              </div>
+              <div class="card-val red">8</div>
+              <div class="bar"></div>
+              <div class="card-status">Muito Alto</div>
+            </div>
+
+            <div class="card" style="--c: #a78bfa; --w: 30%">
+              <div class="card-top">
+                <span>Vel. do vento</span><i data-lucide="wind"></i>
+              </div>
+              <div class="card-val">14 <small>km/h</small></div>
+              <div class="bar"></div>
+              <div class="card-status">Fraco</div>
+            </div>
+
+            <div class="card" style="--c: #facc15; --w: 60%">
+              <div class="card-top">
+                <span>Pressão atm.</span><i data-lucide="gauge"></i>
+              </div>
+              <div class="card-val">1009 <small>hPa</small></div>
+              <div class="bar"></div>
+              <div class="card-status">Baixa pressão</div>
+            </div>
+
+            <div class="card" style="--c: #3b82f6; --w: 65%">
+              <div class="card-top">
+                <span>Chance de chuva</span><i data-lucide="cloud-rain"></i>
+              </div>
+              <div class="card-val">65%</div>
+              <div class="bar"></div>
+              <div class="card-status">Possível</div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <footer class="footer">
       <div class="footer-container">
         <a href="#inicio" class="brand">
           <svg class="brand-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -76,5 +159,10 @@
         </ul>
       </div>
     </footer>
+    </main>
+
+    <script>
+      lucide.createIcons();
+    </script>
   </body>
 </html>
