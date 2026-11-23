@@ -21,6 +21,8 @@
     alertMessage: $("alert-message"),
     error: $("weather-error"),
     refresh: $("refresh-weather"),
+    apiStatus: $("api-status"),
+    apiStatusLabel: $("api-status-label"),
     search: $("capital-search-input"),
     options: $("capital-options"),
     searchStatus: $("capital-search-status"),
@@ -136,14 +138,112 @@
     fields.search.setAttribute("aria-expanded", "true");
   }
   const setStatus = (label, live = false) => {
-    fields.status.className = `weather-status${live ? " is-live" : ""}`;
+    const mode = typeof live === "string" ? live : live ? "is-live" : "";
+    fields.status.className = `weather-status ${mode}`.trim();
     fields.status.replaceChildren(
       document.createElement("i"),
       document.createTextNode(` ${label}`),
     );
   };
 
-  function renderWeather(weather, updateHero = true) {
+  const apiStates = {
+    checking: ["is-loading", "VERIFICANDO"],
+    live: ["", "AO VIVO"],
+    limitedCache: ["is-cache", "LIMITE · CACHE"],
+    limitedDemo: ["is-cache", "LIMITE · DEMO"],
+    offlineCache: ["is-cache", "SEM API · CACHE"],
+    offlineDemo: ["is-offline", "SEM API · DEMO"],
+    missingKeyCache: ["is-demo", "SEM CHAVE · CACHE"],
+    missingKey: ["is-demo", "SEM CHAVE · DEMO"],
+    offline: ["is-offline", "SEM DADOS"],
+  };
+  function setApiStatus(state) {
+    const [className, label] = apiStates[state] || apiStates.offline;
+    fields.apiStatus.className = `live-badge ${className}`.trim();
+    fields.apiStatusLabel.textContent = label;
+  }
+
+  const cacheKey = (state) => `tambaclima:weather:${state}`;
+  function readSessionCache(state) {
+    try {
+      const entry = JSON.parse(
+        sessionStorage.getItem(cacheKey(state)) || "null",
+      );
+      return entry?.weather ? entry : null;
+    } catch {
+      return null;
+    }
+  }
+  function writeSessionCache(weather) {
+    try {
+      sessionStorage.setItem(
+        cacheKey(weather.state),
+        JSON.stringify({ weather, cachedAt: new Date().toISOString() }),
+      );
+    } catch (error) {
+      console.warn("Não foi possível salvar o cache desta sessão:", error);
+    }
+  }
+
+  let mockDataRequest;
+  async function readMockWeather(city, state) {
+    mockDataRequest ||= fetch("/src/data/mockedData.json").then((response) => {
+      if (!response.ok)
+        throw new Error("Não foi possível abrir mockedData.json.");
+      return response.json();
+    });
+    const mocked = await mockDataRequest;
+    const cityKey = Object.keys(mocked.cities || {}).find(
+      (name) => normalize(name) === normalize(city),
+    );
+    const data = cityKey ? mocked.cities[cityKey] : null;
+    if (!data || data.state !== state) return null;
+    return { ...data, city: cityKey, state };
+  }
+
+  async function renderFallback(city, state, updateHero, cause) {
+    try {
+      const cached = readSessionCache(state);
+      const weather = cached?.weather || (await readMockWeather(city, state));
+      if (!weather) throw new Error(`Não há dados de fallback para ${city}.`);
+      const mode = cached ? "cache" : "demo";
+      renderWeather(weather, updateHero, mode, cached?.cachedAt);
+      const status = /HTTP 429/.test(cause)
+        ? cached
+          ? "limitedCache"
+          : "limitedDemo"
+        : /Chave Weatherbit não configurada/.test(cause)
+          ? cached
+            ? "missingKeyCache"
+            : "missingKey"
+          : cached
+            ? "offlineCache"
+            : "offlineDemo";
+      setApiStatus(status);
+      const fallbackLabel = cached
+        ? `Usando dados salvos nesta sessão (${city}, ${state}).`
+        : `Exibindo dados de exemplo para ${city}, ${state}; eles não são atuais.`;
+      if (updateHero) {
+        fields.error.textContent = `${fallbackLabel} Consulta à Weatherbit: ${cause}`;
+        fields.error.hidden = false;
+      } else fields.searchStatus.textContent = `${fallbackLabel} ${cause}`;
+    } catch (fallbackError) {
+      setApiStatus("offline");
+      const message = `${cause} ${fallbackError.message}`;
+      if (updateHero) {
+        setStatus("DADOS INDISPONÍVEIS");
+        fields.error.textContent = message;
+        fields.error.hidden = false;
+      } else fields.searchStatus.textContent = message;
+    }
+  }
+
+  function renderWeather(
+    weather,
+    updateHero = true,
+    mode = "live",
+    cachedAt = null,
+  ) {
     const uv = Math.max(0, Number(weather.uv) || 0);
     const rain = Number(weather.rainChance) || 0;
     const wind = Number(weather.windKmh) || 0;
@@ -219,16 +319,20 @@
       fields.uvLevel.textContent = uvCategory(uv);
       fields.uvFill.style.width = `${Math.min(100, (uv / 11) * 100)}%`;
       fields.uvMeter.setAttribute("aria-valuenow", String(Math.min(11, uv)));
-      const observed = weather.observedAt
-        ? new Date(weather.observedAt)
-        : new Date();
-      fields.updated.textContent =
-        new Intl.DateTimeFormat("pt-BR", {
+      if (mode === "demo") {
+        fields.updated.textContent = "DADOS DE EXEMPLO";
+      } else {
+        const timestamp = mode === "cache" ? cachedAt : weather.observedAt;
+        const observed = timestamp ? new Date(timestamp) : new Date();
+        const time = new Intl.DateTimeFormat("pt-BR", {
           timeZone: "America/Manaus",
           hour: "2-digit",
           minute: "2-digit",
           hour12: false,
-        }).format(observed) + " BRT";
+        }).format(observed);
+        fields.updated.textContent =
+          mode === "cache" ? `CACHE · ${time} BRT` : `${time} BRT`;
+      }
       if (uv >= 6) {
         fields.alert.hidden = false;
         fields.alertTitle.textContent = `ALERTA UV ${uvCategory(uv).toLocaleUpperCase("pt-BR")}`;
@@ -240,23 +344,37 @@
         fields.alertMessage.textContent = `Previsão de ${number(rain)}% de chuva nas próximas horas.`;
       } else fields.alert.hidden = true;
       fields.error.hidden = true;
-      setStatus("DADOS ATUALIZADOS", true);
+      setStatus(
+        mode === "live"
+          ? "DADOS AO VIVO"
+          : mode === "cache"
+            ? "CACHE DA SESSÃO"
+            : "DADOS DE EXEMPLO",
+        mode === "live"
+          ? "is-live"
+          : mode === "cache"
+            ? "is-fallback"
+            : "is-demo",
+      );
     }
+    fields.error.hidden = true;
+    if (mode === "live") setApiStatus("live");
   }
 
   async function loadWeather(city = "Manaus", state = "AM", updateHero = true) {
     const apiKey = window.TAMBACLIMA_CONFIG?.weatherbitApiKey;
     if (!apiKey) {
-      const message = "Configure a chave Weatherbit em src/scripts/config.js.";
-      if (updateHero) {
-        setStatus("API NÃO CONFIGURADA");
-        fields.error.textContent = message;
-        fields.error.hidden = false;
-      } else fields.searchStatus.textContent = message;
+      await renderFallback(
+        city,
+        state,
+        updateHero,
+        "Chave Weatherbit não configurada.",
+      );
       return;
     }
     fields.refresh.disabled = true;
     fields.refresh.setAttribute("aria-busy", "true");
+    setApiStatus("checking");
     if (updateHero) {
       fields.error.hidden = true;
       setStatus("ATUALIZANDO");
@@ -295,25 +413,23 @@
       const current = currentPayload.data?.[0];
       if (!current)
         throw new Error(`A Weatherbit não retornou dados para ${city}.`);
-      renderWeather(
-        {
-          city: current.city_name || city,
-          state: current.state_code || state,
-          temp: current.temp,
-          feelsLike: current.app_temp,
-          description: current.weather?.description,
-          humidity: current.rh,
-          windKmh: Number(current.wind_spd) * 3.6,
-          rainChance: forecastPayload.data?.[0]?.pop ?? 0,
-          pressure: current.pres,
-          uv: current.uv,
-          observedAt:
-            current.ob_date && current.ob_time
-              ? `${current.ob_date}T${current.ob_time}:00-04:00`
-              : new Date().toISOString(),
-        },
-        updateHero,
-      );
+      const weather = {
+        city: current.city_name || city,
+        state: current.state_code || state,
+        temp: current.temp,
+        feelsLike: current.app_temp,
+        description: current.weather?.description,
+        humidity: current.rh,
+        windKmh: Number(current.wind_spd) * 3.6,
+        rainChance: forecastPayload.data?.[0]?.pop ?? 0,
+        pressure: current.pres,
+        uv: current.uv,
+        observedAt: current.ts
+          ? new Date(current.ts * 1000).toISOString()
+          : new Date().toISOString(),
+      };
+      writeSessionCache(weather);
+      renderWeather(weather, updateHero);
       if (!updateHero)
         fields.searchStatus.textContent = `Clima atualizado para ${city}, ${state}.`;
     } catch (error) {
@@ -322,12 +438,7 @@
         error.name === "AbortError"
           ? "A consulta demorou demais. Tente atualizar novamente."
           : error.message || "Verifique sua conexão e tente novamente.";
-      if (updateHero) {
-        setStatus("DADOS INDISPONÍVEIS");
-        fields.error.textContent = message;
-        fields.error.hidden = false;
-      } else
-        fields.searchStatus.textContent = `Não foi possível carregar ${city}. ${message}`;
+      await renderFallback(city, state, updateHero, message);
     } finally {
       window.clearTimeout(timeout);
       fields.refresh.disabled = false;

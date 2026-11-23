@@ -1,0 +1,32 @@
+{
+  "description": "Dados estáticos de demonstração do protótipo. Não representam condições meteorológicas atuais.",
+  "cities": {
+    "Aracaju": { "state": "SE", "temp": 27, "feelsLike": 30, "description": "Parcialmente nublado", "humidity": 79, "uv": 8, "windKmh": 20, "pressure": 1013, "rainChance": 30 },
+    "Belém": { "state": "PA", "temp": 29, "feelsLike": 34, "description": "Chuva moderada", "humidity": 92, "uv": 5, "windKmh": 18, "pressure": 1011, "rainChance": 85 },
+    "Belo Horizonte": { "state": "MG", "temp": 22, "feelsLike": 23, "description": "Sol e nuvens", "humidity": 65, "uv": 7, "windKmh": 14, "pressure": 1017, "rainChance": 25 },
+    "Boa Vista": { "state": "RR", "temp": 33, "feelsLike": 40, "description": "Muito quente", "humidity": 72, "uv": 11, "windKmh": 10, "pressure": 1007, "rainChance": 30 },
+    "Brasília": { "state": "DF", "temp": 24, "feelsLike": 26, "description": "Ensolarado", "humidity": 55, "uv": 11, "windKmh": 12, "pressure": 1018, "rainChance": 10 },
+    "Campo Grande": { "state": "MS", "temp": 27, "feelsLike": 29, "description": "Sol e nuvens", "humidity": 62, "uv": 9, "windKmh": 14, "pressure": 1014, "rainChance": 20 },
+    "Cuiabá": { "state": "MT", "temp": 35, "feelsLike": 41, "description": "Muito quente", "humidity": 45, "uv": 12, "windKmh": 8, "pressure": 1005, "rainChance": 5 },
+    "Curitiba": { "state": "PR", "temp": 16, "feelsLike": 14, "description": "Nublado e fresco", "humidity": 72, "uv": 2, "windKmh": 28, "pressure": 1021, "rainChance": 40 },
+    "Florianópolis": { "state": "SC", "temp": 18, "feelsLike": 17, "description": "Nublado", "humidity": 75, "uv": 3, "windKmh": 26, "pressure": 1020, "rainChance": 35 },
+    "Fortaleza": { "state": "CE", "temp": 30, "feelsLike": 33, "description": "Ensolarado", "humidity": 68, "uv": 10, "windKmh": 26, "pressure": 1014, "rainChance": 15 },
+    "Goiânia": { "state": "GO", "temp": 26, "feelsLike": 28, "description": "Parcialmente nublado", "humidity": 60, "uv": 8, "windKmh": 16, "pressure": 1016, "rainChance": 25 },
+    "João Pessoa": { "state": "PB", "temp": 28, "feelsLike": 31, "description": "Sol e nuvens", "humidity": 75, "uv": 9, "windKmh": 25, "pressure": 1014, "rainChance": 15 },
+    "Macapá": { "state": "AP", "temp": 30, "feelsLike": 35, "description": "Parcialmente nublado", "humidity": 86, "uv": 8, "windKmh": 16, "pressure": 1010, "rainChance": 60 },
+    "Maceió": { "state": "AL", "temp": 28, "feelsLike": 31, "description": "Ensolarado", "humidity": 76, "uv": 9, "windKmh": 22, "pressure": 1014, "rainChance": 20 },
+    "Manaus": { "state": "AM", "temp": 32, "feelsLike": 38, "description": "Parcialmente nublado", "humidity": 87, "uv": 8, "windKmh": 14, "pressure": 1009, "rainChance": 65 },
+    "Natal": { "state": "RN", "temp": 29, "feelsLike": 32, "description": "Ensolarado", "humidity": 71, "uv": 10, "windKmh": 28, "pressure": 1015, "rainChance": 10 },
+    "Palmas": { "state": "TO", "temp": 33, "feelsLike": 38, "description": "Ensolarado", "humidity": 52, "uv": 11, "windKmh": 14, "pressure": 1012, "rainChance": 10 },
+    "Porto Alegre": { "state": "RS", "temp": 15, "feelsLike": 13, "description": "Nublado", "humidity": 70, "uv": 2, "windKmh": 30, "pressure": 1022, "rainChance": 30 },
+    "Porto Velho": { "state": "RO", "temp": 31, "feelsLike": 37, "description": "Chuva leve", "humidity": 84, "uv": 7, "windKmh": 10, "pressure": 1008, "rainChance": 70 },
+    "Recife": { "state": "PE", "temp": 29, "feelsLike": 33, "description": "Chuva leve", "humidity": 82, "uv": 6, "windKmh": 24, "pressure": 1012, "rainChance": 55 },
+    "Rio Branco": { "state": "AC", "temp": 28, "feelsLike": 33, "description": "Chuva moderada", "humidity": 89, "uv": 5, "windKmh": 12, "pressure": 1009, "rainChance": 75 },
+    "Rio de Janeiro": { "state": "RJ", "temp": 28, "feelsLike": 32, "description": "Sol e nuvens", "humidity": 72, "uv": 9, "windKmh": 16, "pressure": 1012, "rainChance": 25 },
+    "Salvador": { "state": "BA", "temp": 27, "feelsLike": 30, "description": "Parcialmente nublado", "humidity": 80, "uv": 7, "windKmh": 20, "pressure": 1013, "rainChance": 35 },
+    "São Luís": { "state": "MA", "temp": 30, "feelsLike": 34, "description": "Chuva leve", "humidity": 84, "uv": 6, "windKmh": 20, "pressure": 1011, "rainChance": 65 },
+    "São Paulo": { "state": "SP", "temp": 20, "feelsLike": 19, "description": "Nublado", "humidity": 78, "uv": 3, "windKmh": 22, "pressure": 1016, "rainChance": 40 },
+    "Teresina": { "state": "PI", "temp": 31, "feelsLike": 35, "description": "Sol com nuvens", "humidity": 65, "uv": 10, "windKmh": 18, "pressure": 1013, "rainChance": 20 },
+    "Vitória": { "state": "ES", "temp": 26, "feelsLike": 28, "description": "Sol e mar", "humidity": 70, "uv": 8, "windKmh": 18, "pressure": 1015, "rainChance": 20 }
+  }
+}

@@ -138,6 +138,30 @@ h6 {
   border-radius: 50%;
   box-shadow: 0 0 8px #10b981;
 }
+.live-badge.is-cache {
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.28);
+}
+.live-badge.is-cache .live-dot { background: currentColor; box-shadow: 0 0 8px currentColor; }
+.live-badge.is-demo {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.1);
+  border-color: rgba(56, 189, 248, 0.28);
+}
+.live-badge.is-demo .live-dot { background: currentColor; box-shadow: 0 0 8px currentColor; }
+.live-badge.is-offline {
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.28);
+}
+.live-badge.is-offline .live-dot { background: currentColor; box-shadow: 0 0 8px currentColor; }
+.live-badge.is-loading {
+  color: #9ec4b0;
+  background: rgba(158, 196, 176, 0.08);
+  border-color: rgba(158, 196, 176, 0.2);
+}
+.live-badge.is-loading .live-dot { background: currentColor; box-shadow: none; }
 
 @media (max-width: 768px) {
   .nav-container {
@@ -402,6 +426,12 @@ h6 {
 }
 .weather-status.is-fallback i {
   background: var(--color-warning);
+}
+.weather-status.is-demo {
+  color: var(--color-info);
+}
+.weather-status.is-demo i {
+  background: var(--color-info);
 }
 .weather-main {
   display: flex;
