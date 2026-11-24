@@ -143,25 +143,37 @@ h6 {
   background: rgba(245, 158, 11, 0.1);
   border-color: rgba(245, 158, 11, 0.28);
 }
-.live-badge.is-cache .live-dot { background: currentColor; box-shadow: 0 0 8px currentColor; }
+.live-badge.is-cache .live-dot {
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+}
 .live-badge.is-demo {
   color: #38bdf8;
   background: rgba(56, 189, 248, 0.1);
   border-color: rgba(56, 189, 248, 0.28);
 }
-.live-badge.is-demo .live-dot { background: currentColor; box-shadow: 0 0 8px currentColor; }
+.live-badge.is-demo .live-dot {
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+}
 .live-badge.is-offline {
   color: #f87171;
   background: rgba(239, 68, 68, 0.1);
   border-color: rgba(239, 68, 68, 0.28);
 }
-.live-badge.is-offline .live-dot { background: currentColor; box-shadow: 0 0 8px currentColor; }
+.live-badge.is-offline .live-dot {
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+}
 .live-badge.is-loading {
   color: #9ec4b0;
   background: rgba(158, 196, 176, 0.08);
   border-color: rgba(158, 196, 176, 0.2);
 }
-.live-badge.is-loading .live-dot { background: currentColor; box-shadow: none; }
+.live-badge.is-loading .live-dot {
+  background: currentColor;
+  box-shadow: none;
+}
 
 @media (max-width: 768px) {
   .nav-container {
@@ -321,12 +333,9 @@ h6 {
   font-size: 0.85rem;
   margin-bottom: 30px;
 }
-.hero-location svg {
+.hero-location img {
   width: 17px;
   height: 17px;
-  fill: none;
-  stroke: var(--color-primary);
-  stroke-width: 1.7;
 }
 .hero-cta {
   display: inline-flex;
@@ -551,14 +560,9 @@ h6 {
   cursor: wait;
   opacity: 0.55;
 }
-.refresh-button svg {
+.refresh-button img {
   width: 14px;
   height: 14px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.7;
-  stroke-linecap: round;
-  stroke-linejoin: round;
 }
 .hero-scroll {
   position: absolute;
@@ -817,10 +821,14 @@ h6 {
   border-radius: 12px;
 }
 
-.curiosity-card__icon svg {
+.curiosity-card__icon-art {
   display: block;
   width: 18px;
   height: 18px;
+  background: currentColor;
+  -webkit-mask: url("/public/assets/icons/climate-fact.svg") center / contain
+    no-repeat;
+  mask: url("/public/assets/icons/climate-fact.svg") center / contain no-repeat;
 }
 
 .curiosity-card__title {
@@ -1141,10 +1149,28 @@ input:focus {
   width: 100%;
   max-height: 390px;
   overflow-y: auto;
-  background: #0b1d14;
-  border: 1px solid #1e3d2c;
+  background: var(--color-surface, #0d2118);
+  border: 1px solid var(--color-border, #1e3d2c);
   border-radius: 12px;
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-secondary, #4a6e58)
+    var(--color-background-secondary, #071a13);
+}
+.capital-options::-webkit-scrollbar {
+  width: 10px;
+}
+.capital-options::-webkit-scrollbar-track {
+  background: var(--color-background-secondary, #071a13);
+  border-radius: 0 12px 12px 0;
+}
+.capital-options::-webkit-scrollbar-thumb {
+  background: var(--color-border-secondary, #4a6e58);
+  border: 2px solid var(--color-background-secondary, #071a13);
+  border-radius: 999px;
+}
+.capital-options::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary, #2dd473);
 }
 .capital-options[hidden] {
   display: none;
@@ -1156,10 +1182,11 @@ input:focus {
   gap: 16px;
   width: 100%;
   padding: 13px 16px;
-  color: #e8f5ee;
+  color: var(--color-text-primary, #e8f5ee);
   background: transparent;
   border: 0;
-  border-bottom: 1px solid rgba(74, 110, 88, 0.3);
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--color-border-secondary, #4a6e58) 42%, transparent);
   text-align: left;
   font:
     600 0.88rem "Outfit",
@@ -1171,7 +1198,7 @@ input:focus {
 }
 .capital-option:hover,
 .capital-option:focus-visible {
-  background: #173326;
+  background: var(--color-surface-hover, #1a3329);
   outline: none;
 }
 .capital-option small {
