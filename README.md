@@ -1,25 +1,31 @@
-# 🌤️ Tambaclima
+# Tambaclima
+
+Landing page responsiva para consultar condições meteorológicas e informações sobre o clima amazônico. O painel oferece dados para Manaus e permite pesquisar as 27 capitais brasileiras.
 
 ## Executar localmente
 
-Abra `index.html` com a extensão Live Server do VS Code. Para a consulta funcionar, informe a chave Weatherbit em `src/scripts/config.js` (use `config.example.js` como modelo). Esse arquivo é local e está ignorado pelo Git.
+Use um servidor HTTP local, como a extensão Live Server do VS Code, na raiz do repositório. Para consultas ao vivo em `localhost` ou `127.0.0.1`, crie `src/scripts/config.js` a partir de `src/scripts/config.example.js` e informe uma chave Weatherbit. O arquivo local é ignorado pelo Git. Nesse modo, o navegador consulta diretamente os endpoints Weatherbit; a chave fica visível no navegador, portanto use apenas uma chave apropriada para desenvolvimento.
 
-O navegador consulta diretamente a Weatherbit. Como o Live Server é estático, ele não lê o `.env`; a chave precisa estar na configuração JavaScript do navegador e fica visível para qualquer pessoa que inspecionar o site publicado. Para um site público, use uma chave com limites de uso apropriados ou um proxy de API.
+Em implantação na Vercel, configure `WEATHERBIT_API_KEY` como variável de ambiente. A função `api/weather.mjs` valida a capital e consulta os endpoints Current e Forecast Daily no servidor, mantendo a chave fora do cliente. Respostas bem-sucedidas da função podem ser armazenadas na CDN por cinco minutos, com revalidação obsoleta por até dez minutos.
 
-Ao abrir ou recarregar a página, o site usa primeiro o clima de Manaus salvo na `sessionStorage` desta aba. Sem cache, consulta a Weatherbit e salva o resultado; se a consulta falhar, tenta o cache e depois os dados de demonstração de `src/data/mockedData.json`. Capitais consultadas no painel detalhado seguem o mesmo fluxo e são armazenadas por estado. O botão **Atualizar dados** força uma nova consulta para a capital exibida no painel. O indicador mostra se os dados são ao vivo, de cache, de demonstração ou estão indisponíveis.
+## Dados e contingência
 
-O **Tambaclima** é uma *landing page* web responsiva desenvolvida para exibir dados meteorológicos em tempo real da cidade de Manaus, além de apresentar um painel educativo sobre o clima e as curiosidades ambientais da região amazônica.
+Ao abrir a página, o Tambaclima mostra primeiro, quando disponível, o clima de Manaus salvo na `sessionStorage` da aba. Sem cache correspondente, consulta a Weatherbit. Falhas, timeout, limite de requisições ou chave ausente acionam os dados locais de `src/data/mockedData.json`; esses valores são demonstração e não representam condições atuais. O cache e os dados de demonstração são identificados na interface. A busca e o botão **Atualizar dados** permitem consultar ou atualizar a capital selecionada.
 
-## 🚀 Funcionalidades
+## Funcionalidades
 
-- **Clima em Tempo Real (Manaus):** Exibição de temperatura, sensação térmica, umidade e índice UV de Manaus atualizados via API pública.
-- **Seção Amazônia:** Painel informativo sobre o ecossistema climática e curiosidades da Floresta Amazônica.
-- **Clima Detalhado & Busca de Cidades:** Consulta detalhada de indicadores climáticos com opção de busca de outras cidades.
-- **Modo de Contingência (*Fallback*):** Chaveamento automático para dados em JSON local caso a API externa fique indisponível.
+- Condições atuais: temperatura, sensação térmica, umidade, vento, pressão e índice UV.
+- Chance de chuva obtida pela previsão diária da Weatherbit.
+- Alertas visuais para UV elevado e alta chance de chuva.
+- Busca de capitais brasileiras e painel climático detalhado.
+- Seção educativa sobre clima e ecossistema amazônico.
+- Fallback local e cache por sessão para uso durante falhas da API.
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias e estrutura
 
-- **HTML5 & CSS3** (Estruturação e estilização responsiva sem frameworks)
-- **JavaScript / TypeScript** (Lógica de requisições e manipulação de DOM)
-- **API WeatherBit** (Provedor de dados climatológicos)
-- **Vercel** (Hospedagem e deploy)
+- HTML, CSS e JavaScript sem framework de frontend.
+- Vercel Function em `api/weather.mjs` para chamadas Weatherbit no deploy.
+- JSON local de demonstração em `src/data/mockedData.json`.
+- Contrato de integração em [`docs/api/openapi.yaml`](docs/api/openapi.yaml).
+
+Não há TypeScript, banco de dados ou autenticação no repositório. Os dados de fallback são estáticos e não devem ser apresentados como dados ao vivo.

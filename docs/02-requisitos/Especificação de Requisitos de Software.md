@@ -4,10 +4,11 @@
 | :--------: | :-----: | :---------------------------------------------------------------------: | :--------------------------: |
 | 31/08/2026 |   1.0   | Elaboração inicial da Especificação de Requisitos de Software (ERS) | Carlos Gabriel Silva Ribeiro |
 | 10/11/2026 |   1.1   | Atualização de escopo, arquitetura, dados, API e casos de uso conforme repositório e GitHub Project | Carlos Gabriel Silva Ribeiro |
+| 25/11/2026 |   1.2   | Revisão da arquitetura, integração, cache e fallback conforme implementação no repositório | Equipe Tambaclima |
 
 **1\. Introdução**
 
-A presente Especificação de Requisitos de Software (ERS) detalha a arquitetura pretendida, os casos de uso, os requisitos de interface e a integração de APIs para o sistema **Tambaclima**. Em 10/11/2026, a implementação está em andamento; os módulos ainda não presentes no repositório são planejados, não implementados.
+A presente ERS descreve a arquitetura, os casos de uso, os requisitos de interface e as integrações de API do **Tambaclima**, comparados ao código do repositório em 25/11/2026. Este documento não certifica publicação, testes ou aceite formal.
 
 O sistema consiste em uma *landing page* web construída em **HTML5, CSS3 e JavaScript puro (vanilla)**, sem dependência de frameworks complexos. Seu foco principal é a exibição de dados climáticos em tempo real para a cidade de Manaus-AM, apresentação de fatos/curiosidades climáticas da Amazônia e um panorama das capitais do Brasil.
 
@@ -17,11 +18,12 @@ O sistema consiste em uma *landing page* web construída em **HTML5, CSS3 e Java
 
 **2.1 Arquitetura de Camadas**
 
-A arquitetura pretendida segue o padrão cliente-side tradicional em **camadas**. A estrutura atual contém HTML, CSS, JavaScript e JSON; a separação em serviços descrita abaixo é planejada:
+A arquitetura segue o padrão web em **camadas**. A estrutura atual contém HTML, CSS, JavaScript, JSON local e uma função serverless da Vercel:
 
 1. **Camada de Apresentação (Interface / DOM):** Arquivo `index.html` e estilizações CSS3 (`style.css`), responsáveis por renderizar os cartões de clima, botões e seções de curiosidades.
 2. **Camada de Lógica de Aplicação (JavaScript):** Scripts executados no navegador (`src/scripts/script.js`) que manipulam a DOM, capturam eventos do usuário e orquestram a exibição das informações.
-3. **Camada de Serviços e Dados (API Service & Mock Fallback):** Módulo de serviço climático a ser implementado encarregado de efetuar as chamadas via `fetch()` para a API Weatherbit e chavear para o `src/data/mockedData.json` caso haja indisponibilidade da rede.
+3. **Camada de serviços e dados:** `src/scripts/script.js` consulta a Weatherbit diretamente em execução local quando há configuração ou chama `/api/weather` no deploy. Usa cache na `sessionStorage` e `src/data/mockedData.json` em caso de falha.
+4. **Proxy de API no deploy:** `api/weather.mjs` valida método e capital, usa `WEATHERBIT_API_KEY` no servidor e consulta Current e Forecast Daily. Respostas bem-sucedidas são cacheadas na CDN por 300 segundos, com revalidação obsoleta por 600 segundos.
 
 **3\. Modelo de Casos de Uso**
 
@@ -63,15 +65,15 @@ O visitante pode consultar o clima atual de Manaus, as curiosidades da Amazônia
 
 **4\. Modelo de Dados (lógico)**
 
-O Tambaclima é uma aplicação cliente-side, sem backend próprio e sem banco de dados relacional. O contrato de dados externo é o JSON da Weatherbit; os dados locais em `src/data/mockedData.json` são previstos para fallback. O uso de LocalStorage não está confirmado na implementação atual e não é requisito desta versão. Estrutura conceitual: `WeatherSnapshot` contém localidade, instante de observação, temperatura, sensação térmica, umidade, vento, pressão, UV, precipitação e descrição/ícone da condição, com proveniência (`weatherbit` ou `mock`). Campos ausentes devem ser tratados como indisponíveis, sem inventar valores.
+O Tambaclima não tem banco de dados. No deploy, a função serverless `/api/weather` serve de proxy. O cliente mantém cache por aba em `sessionStorage` e usa `src/data/mockedData.json` como demonstração em falhas. `WeatherSnapshot` contém localidade, instante da observação, temperatura, sensação térmica, umidade, vento, pressão, UV, chance de chuva e descrição. Dados demonstrativos são identificados como não atuais.
 
 **5\. Regras de Validação**
 
 | Código | Regra                        | Ação do sistema                                                                                                                              |
 | :------ | :--------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------- |
-| RV-01   | Validação da resposta Http | Se o código HTTP da requisição à API for diferente de `200 OK`, acionar imediatamente a leitura do arquivo JSON local de dados mockados. |
+| RV-01   | Validação da resposta HTTP | Respostas não exitosas e erros de rede/timeout acionam fallback: cache da sessão correspondente, depois dados demonstrativos locais. |
 | RV-02   | Formatação de temperatura  | Valores numéricos de temperatura devem ser arredondados para inteiros ou 1 casa decimal e acompanhados da unidade `°C`.                    |
-| RV-03   | Limites do ìndice UV        | Se o índice UV for maior ou igual a 8.0, aplicar cor de destaque de alerta amarelo/vermelho.                                                  |
+| RV-03   | Limites do índice UV        | A interface classifica UV em baixo (≤2), moderado (≤5), alto (≤7), muito alto (≤10) e extremo (>10); alerta a partir de 6. |
 
 **6\. Requisitos de Interface**
 
@@ -85,17 +87,17 @@ O Tambaclima é uma aplicação cliente-side, sem backend próprio e sem banco d
 
 **7\. Requisitos de API REST**
 
-* **Endpoint documentado:** GET `https://api.weatherbit.io/v2.0/current` (condições atuais; contrato em `docs/api/openapi.yaml`).
+* **Endpoints documentados:** GET `/current` e `/forecast/daily` da Weatherbit (contrato em `docs/api/openapi.yaml`). O primeiro fornece condições atuais; `pop` da previsão diária fornece a chance de chuva exibida.
 * **Parâmetros da Requisição:**
 
   * **city:** Manaus
   * **country:** BR
   * **key:** variável secreta `WEATHERBIT_API_KEY`; nunca registrar valor real nos documentos ou no repositório.
-  * **units:** M (métrico)
+  * **units:** sistema métrico padrão do provedor (parâmetro não enviado pelo código atual)
   * **lang:** pt
-* **Tratamento de Erros de Integração:** Timeout configurado para 5000ms (5 segundos). Se a API não responder no tempo estipulado, aborta a requisição e utiliza a resposta estática do arquivo com dados salvos.
+* **Tratamento de Erros de Integração:** O navegador aborta após 10 segundos; a função Vercel configura timeout de 8 segundos para as chamadas ao provedor. O fallback usa cache da sessão e depois dados estáticos de demonstração.
 
 
-**8. Limites e pendências de escopo (10/11/2026)**
+**8. Limites e pendências de escopo (25/11/2026)**
 
-A API current fornece condições atuais, não previsão. A chance/probabilidade de chuva e a previsão citadas em requisitos anteriores não estão cobertas por esse endpoint; requerem endpoint adicional e confirmação de escopo. RF-02 (previsão), RF-05 (alertas), RF-06 (capitais) e RF-07 (atualização manual/automática) precisam de validação/rastreio explícito no Project. A issue #16 está em progresso e vinculada ao painel detalhado (#11); isso não equivale à conclusão dos requisitos relacionados. A lista de requisitos e casos de uso desta ERS deve ser lida como escopo pretendido, com estado de implementação acompanhado pela RTM e pelo Project. A lista da Entrega 2 também usa RF-02 para segurança, enquanto o Documento de Requisitos atual usa RF-02 para previsão; confirmar com o professor a nomenclatura e o que espera avaliar, pois o projeto atual não prevê backend.
+O repositório consulta Current e Forecast Daily: o painel mostra chance de precipitação para o primeiro dia, não uma série de previsão para vários dias. A interface implementa alertas UV/chuva, busca entre as 27 capitais e atualização manual. RF-02 (previsão detalhada para dias subsequentes) continua parcialmente atendido e precisa de decisão de escopo/rastreio na RTM. A implementação inclui função serverless no deploy, sem banco de dados ou autenticação. O estado de validação e aprovação formal deve ser confirmado na RTM e nos registros da equipe; commits recentes, por si só, não são evidência de aceite.

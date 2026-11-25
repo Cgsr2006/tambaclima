@@ -4,6 +4,7 @@
 | :--------: | :-----: | --------------------------------------------------------------------- | :--------------------------: |
 | 26/08/2026 |   1.0   | Elaboração inicial do Documento de Requisitos do sistema Tambaclima | Carlos Gabriel Silva Ribeiro |
 | 10/11/2026 |   1.1   | Revisão do estado, plataforma e limites da integração Weatherbit | Carlos Gabriel Silva Ribeiro |
+| 25/11/2026 |   1.2   | Atualização da arquitetura, cache e dados meteorológicos conforme implementação | Equipe Tambaclima |
 
 **1\. Introdução**
 
@@ -43,7 +44,7 @@ Especificar os requisitos funcionais (RF), requisitos não funcionais (RNF) e re
 
 **3\. Visão Geral do Sistema**
 
-O **Tambaclima** é um sistema web do tipo *landing page* projetado para oferecer uma consulta rápida, intuitiva e educativa sobre o clima de Manaus e da região amazônica. Ao acessar o site, o usuário encontra na área principal as condições climáticas atuais da cidade de Manaus (temperatura, umidade, vento, chuva e índice UV). Ao rolar a página, é apresentada uma seção com informações relevantes sobre o ecossistema e curiosidades climáticas da Amazônia. Opcionalmente, há um painel secundário com o resumo do tempo em capitais do Brasil. A aplicação está sendo desenvolvida com **HTML5, CSS3 e JavaScript puros (vanilla)**; o repositório atual não contém TypeScript, backend próprio ou banco de dados relacional. A hospedagem prevista é Vercel.
+O **Tambaclima** é uma landing page web para consulta educativa do clima de Manaus e da Amazônia. O site apresenta condições atuais (temperatura, sensação térmica, umidade, vento, pressão e UV), chance de chuva calculada a partir da previsão diária e painel pesquisável para as 27 capitais brasileiras. A aplicação usa **HTML5, CSS3 e JavaScript** sem framework cliente, além da função serverless `api/weather.mjs` no deploy Vercel. Não há TypeScript, banco de dados ou autenticação no repositório. O fallback JSON contém dados demonstrativos, não condições atuais.
 
 **4\. Requisitos Funcionais (RF)**
 
@@ -57,7 +58,7 @@ O **Tambaclima** é um sistema web do tipo *landing page* projetado para oferece
 | RF-06 | **Panorama das Capitais (Escopo Opcional):** O sistema deve permitir visualizar o resumo do clima nas principais capitais do Brasil.                                                                                 |   Baixa   | RF-01      |
 | RF-07 | **Atualização Manual/Automática:** O sistema deve oferecer ao usuário uma opção para recarregar/atualizar os dados do clima instantaneamente.                                                                  |   Média   | RF-01      |
 
-Observação de escopo RF-01: temperatura, sensação térmica, umidade, UV, vento e precipitação observada estão no contrato atual. Probabilidade/alerta de chuva não é fornecida pelo endpoint Current e permanece pendente de confirmação/integração. RF-02 (previsão) também depende de endpoint adicional e confirmação de escopo.
+Observação de escopo RF-01: temperatura, sensação térmica, umidade, UV, vento e pressão vêm do endpoint Current. A chance de chuva exibida vem de `pop` no endpoint Forecast Daily para o primeiro dia. RF-02 descreve previsão detalhada dos dias subsequentes e permanece parcialmente atendido: a implementação atual não exibe uma sequência de dias.
 
 **5\. Requisitos Não Funcionais (RNF)**
 
@@ -80,6 +81,6 @@ Observação de escopo RF-01: temperatura, sensação térmica, umidade, UV, ven
 | RN-04 | **Escopo de Dados Históricos:** O sistema limita-se ao clima em tempo real e previsões de curto prazo, não permitindo consultas a históricos retroativos de anos anteriores.                                       |   Média   | RF-02      |
 
 
-**7. Limites e estado da integração (referência 10/11/2026)**
+**7. Limites e estado da integração (referência 25/11/2026)**
 
-O GitHub Project registra #15 como Done, #6 e #16 como In Progress, e #7–#14 e #17 como Todo. O endpoint Weatherbit Current definido em `docs/api/openapi.yaml` atende condições atuais; não fornece previsão futura ou probabilidade futura de chuva. RF-02 e a probabilidade de chuva de RF-01 dependem de confirmação de escopo e eventual endpoint adicional. As issues abertas/em progresso não são consideradas requisitos concluídos. A rastreabilidade detalhada está em `docs/01-gerenciamento/RTM_Tambaclima.docx`.
+O cliente consulta Weatherbit Current e Forecast Daily. Em execução local, uma chave em `src/scripts/config.js` permite consulta direta pelo navegador; no deploy, `api/weather.mjs` usa a variável `WEATHERBIT_API_KEY` no servidor. O navegador aborta consultas após 10 segundos e a função usa timeout de 8 segundos. Cache por sessão e dados demonstrativos JSON atendem falhas. A busca e a atualização manual estão implementadas no cliente. O estado do GitHub Project e o aceite formal devem ser atualizados pela equipe na RTM; este documento não presume conclusão de validação a partir do código ou dos commits.

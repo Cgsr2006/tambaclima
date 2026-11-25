@@ -1,106 +1,81 @@
 openapi: 3.1.0
 info:
-  title: Contrato de integração Weatherbit Current
-  version: 1.0.0
+  title: Integração meteorológica Tambaclima
+  version: 2.0.0
   description: >-
-    Contrato da integração cliente-side do Tambaclima com o endpoint externo
-    Weatherbit para condições meteorológicas atuais. Não descreve uma API
-    própria do Tambaclima. A resposta e os campos podem variar conforme o
-    plano e a localização. Previsão e probabilidade futura de chuva não fazem
-    parte deste endpoint.
+    Contrato dos endpoints Weatherbit usados pela aplicação. No ambiente local
+    o navegador consulta o provedor; no deploy Vercel a função /api/weather
+    atua como proxy e mantém a chave no servidor. A chave nunca deve ser
+    registrada neste arquivo ou no repositório.
   contact:
     name: Equipe Tambaclima
 servers:
   - url: https://api.weatherbit.io/v2.0
-    description: API pública Weatherbit
-externalDocs:
-  description: Documentação oficial de condições atuais Weatherbit
-  url: https://www.weatherbit.io/api/weather-current
+    description: API Weatherbit consultada localmente e pela função Vercel
 paths:
   /current:
     get:
       operationId: getCurrentWeather
-      summary: Consultar condições meteorológicas atuais
-      description: >-
-        Consulta a observação mais recente para uma localidade. Informe city
-        e country, ou outra forma de localização aceita pelo provedor. A chave
-        da API é uma query parameter exigida pelo provedor; nunca a grave neste
-        arquivo ou no repositório.
+      summary: Consultar condições atuais
       security:
         - weatherbitApiKey: []
       parameters:
         - name: city
           in: query
-          required: false
-          description: Nome da cidade; usado aqui com country=BR.
-          schema:
-            type: string
-            example: Manaus
+          required: true
+          schema: { type: string, example: Manaus }
         - name: country
           in: query
-          required: false
-          description: Código ISO de duas letras do país.
-          schema:
-            type: string
-            minLength: 2
-            maxLength: 2
-            example: BR
-        - name: units
-          in: query
-          required: false
-          description: Sistema de unidades. M corresponde ao sistema métrico.
-          schema:
-            type: string
-            enum: [M, I, S]
-            default: M
+          required: true
+          schema: { type: string, example: BR }
         - name: lang
           in: query
           required: false
-          description: Idioma da descrição textual das condições.
-          schema:
-            type: string
-            default: pt
-            example: pt
+          schema: { type: string, default: pt }
       responses:
         '200':
-          description: Observação atual retornada pelo provedor.
+          description: Observação meteorológica atual
           content:
             application/json:
-              schema:
-                $ref: '#/components/schemas/CurrentWeatherResponse'
-              example:
-                count: 1
-                data:
-                  - city_name: Manaus
-                    country_code: BR
-                    temp: 30.2
-                    app_temp: 34.1
-                    rh: 72
-                    uv: 8.1
-                    wind_spd: 1.4
-                    pres: 1008.5
-                    precip: 0
-                    ob_time: '2026-11-10 12:00'
-                    weather:
-                      code: 800
-                      description: Céu limpo
-                      icon: c01d
-        '400':
-          description: Parâmetros de localização inválidos ou ausentes.
-        '401':
-          description: Chave da API ausente ou inválida.
-        '403':
-          description: Acesso não autorizado pelo provedor ou plano contratado.
-        '429':
-          description: Limite de requisições do provedor excedido.
-        '500':
-          description: Erro interno no serviço Weatherbit.
-        default:
-          description: Outra resposta de erro do provedor.
+              schema: { $ref: '#/components/schemas/WeatherbitResponse' }
+        '400': { description: Localidade inválida ou ausente }
+        '401': { description: Chave ausente ou inválida }
+        '429': { description: Limite de requisições excedido }
+        default: { description: Erro retornado pelo provedor }
+  /forecast/daily:
+    get:
+      operationId: getDailyForecast
+      summary: Consultar probabilidade diária de precipitação
+      description: O cliente usa o primeiro dia da previsão (days=1) para exibir chance de chuva.
+      security:
+        - weatherbitApiKey: []
+      parameters:
+        - name: city
+          in: query
+          required: true
+          schema: { type: string, example: Manaus }
+        - name: country
+          in: query
+          required: true
+          schema: { type: string, example: BR }
+        - name: days
+          in: query
+          required: false
+          schema: { type: integer, default: 1, maximum: 16 }
+        - name: lang
+          in: query
+          required: false
+          schema: { type: string, default: pt }
+      responses:
+        '200':
+          description: Previsão diária, incluindo probabilidade de precipitação
           content:
             application/json:
-              schema:
-                $ref: '#/components/schemas/ProviderError'
+              schema: { $ref: '#/components/schemas/ForecastResponse' }
+        '400': { description: Localidade ou parâmetros inválidos }
+        '401': { description: Chave ausente ou inválida }
+        '429': { description: Limite de requisições excedido }
+        default: { description: Erro retornado pelo provedor }
 components:
   securitySchemes:
     weatherbitApiKey:
@@ -108,70 +83,39 @@ components:
       in: query
       name: key
       description: >-
-        Definir como WEATHERBIT_API_KEY no ambiente local ou secret do GitHub.
-        Esta chave é enviada ao endpoint externo e não deve ser commitada.
+        No deploy, definida como WEATHERBIT_API_KEY no ambiente da Vercel. No
+        desenvolvimento local, fornecida por src/scripts/config.js, que não é
+        versionado e é visível ao navegador.
   schemas:
-    CurrentWeatherResponse:
+    WeatherbitResponse:
       type: object
-      required: [count, data]
       properties:
-        count:
-          type: integer
-          minimum: 0
+        count: { type: integer }
         data:
           type: array
-          items:
-            $ref: '#/components/schemas/CurrentObservation'
+          items: { $ref: '#/components/schemas/CurrentObservation' }
     CurrentObservation:
       type: object
       properties:
-        city_name:
-          type: string
-        state_code:
-          type: [string, 'null']
-        country_code:
-          type: string
-        temp:
-          type: number
-          description: Temperatura do ar; unidade depende do parâmetro units.
-        app_temp:
-          type: number
-          description: Sensação térmica; unidade depende do parâmetro units.
-        rh:
-          type: integer
-          minimum: 0
-          maximum: 100
-          description: Umidade relativa percentual.
-        uv:
-          type: number
-          minimum: 0
-          description: Índice UV.
-        wind_spd:
-          type: number
-          minimum: 0
-          description: Velocidade do vento; m/s quando units=M.
-        pres:
-          type: number
-          description: Pressão na estação, normalmente em mb.
-        precip:
-          type: number
-          minimum: 0
-          description: Precipitação observada, normalmente em mm.
-        ob_time:
-          type: string
-          description: Horário da observação conforme retornado pelo provedor.
+        city_name: { type: string }
+        state_code: { type: [string, 'null'] }
+        temp: { type: number, description: Temperatura em °C no sistema métrico padrão }
+        app_temp: { type: number, description: Sensação térmica em °C }
+        rh: { type: number, description: Umidade relativa percentual }
+        uv: { type: number, description: Índice UV }
+        wind_spd: { type: number, description: Velocidade do vento em m/s }
+        pres: { type: number, description: Pressão atmosférica em hPa }
+        ts: { type: integer, description: Instante da observação em Unix epoch }
         weather:
-          $ref: '#/components/schemas/WeatherDescription'
-    WeatherDescription:
+          type: object
+          properties:
+            description: { type: string }
+    ForecastResponse:
       type: object
       properties:
-        code:
-          type: integer
-        description:
-          type: string
-        icon:
-          type: string
-    ProviderError:
-      type: object
-      additionalProperties: true
-      description: Corpo de erro fornecido pelo serviço externo.
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              pop: { type: number, description: Probabilidade de precipitação percentual }

@@ -13,7 +13,7 @@
 * **Disciplina:** Gerência de Configuração  
 * **Integrantes:** Andrês Miguel Albuquerque Petrelli, Carlos Gabriel Silva Ribeiro, Diorge Guerreiro Ribeiro, Giovanna Coelho Rodrigues e Nataly Ramos Ribeiro  
 * **Período do Projeto:** 19/08/2026 a 25/11/2026
-* **Estado em 10/11/2026:** desenvolvimento em andamento. No GitHub Project em 10/11/2026, a issue #15 está Done; #6 e #16 estão In Progress; #7–#14 e #17 estão Todo. Funcionalidades planejadas não são consideradas concluídas.
+* **Referência de acompanhamento:** o snapshot do GitHub Project descrito na versão 1.1 é de 10/11/2026 e deve ser tratado como histórico. Em 25/11/2026 o repositório inclui painel para capitais, integração Weatherbit com proxy Vercel, cache e fallback. A situação atual das issues, validações e aprovações deve ser confirmada no Project e na RTM; código presente não comprova aceite.
 
 
 **2\. Objetivo do Projeto**
@@ -53,7 +53,7 @@ Desenvolver uma *landing page* responsiva para exibição em tempo real de dados
 | 13 \- 14 | **Validação, Testes e Baseline**: Testes de usabilidade e responsividade em múltiplos navegadores, revisão do controle de versão (ICs) e **congelamento da *Baseline*** na branch `main`  |
 | 14 \- 15 | **Deploy Final & Apresentação:** Publicação da aplicação na Vercel, finalização do Relatório Final e apresentações nos dias 18 e 25/11.  |
 
-O cronograma acima é o planejamento macro original. O acompanhamento operacional ocorre pelas issues do repositório; datas e semanas estimadas devem ser replanejadas conforme o progresso real. No snapshot de 10/11/2026, #15 (estrutura inicial de HTML/CSS/assets) está Done; #6 (preparar estrutura inicial) e #16 (painel detalhado, relacionado a #11) estão In Progress; #7–#14 e #17 estão Todo. O Project do GitHub é a fonte para o estado operacional; a RTM em docs relaciona requisitos, issues, ICs e evidências. Issue concluída no Project não substitui a validação funcional do requisito.
+O cronograma acima é o planejamento macro original. O snapshot de 10/11/2026 registra as issues naquela data e não deve ser usado como status atual. O Project do GitHub é a fonte para o estado operacional, e a RTM relaciona requisitos, issues, ICs e evidências. Issue concluída no Project não substitui validação funcional do requisito.
 
 **5\. Metodologia de Desenvolvimento**
 
